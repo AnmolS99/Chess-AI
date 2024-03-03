@@ -47,6 +47,7 @@ class ChessGUI:
         if self.selected_pos is not None:
             if (row, col) in self.game.get_possible_moves(self.selected_pos):
                 self.game.move_piece(self.selected_pos, (row, col))
-                self.selected_pos = None
-        self.selected_pos = (row, col)
+            self.selected_pos = None
+        else:
+            self.selected_pos = (row, col)
         self.print_game()
