@@ -14,6 +14,7 @@ class ChessBoard:
     def __init__(self):
         self.board = np.zeros((8, 8))   # np array is computationally more efficient than FEN notation and easier to program, however FEN is more memory efficient
         self.turn = Player.white
+        self.captured_pieces = {Player.white: [], Player.black: []}
     
     def reset_board(self):
         # Reset white pieces
@@ -33,9 +34,11 @@ class ChessBoard:
             return []
         else:
             return piece_dict[abs(selected_piece)].get_moves(self.board, selected_pos, self.turn)
-
+    
     def move_piece(self, start_pos, end_pos):
         piece = self.board[start_pos]
         self.board[start_pos] = 0
+        if self.board[end_pos] != 0:
+            self.captured_pieces[self.turn].append(self.board[end_pos])
         self.board[end_pos] = piece
         self.turn = Player.white if self.turn == Player.black else Player.black
