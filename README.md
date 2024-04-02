@@ -1,8 +1,8 @@
-# Chess
+# Chess ♟️
 
 A personal project attempting chess programming
 
-## Terminalogy
+## Terminology
 
 ### Moves
 
