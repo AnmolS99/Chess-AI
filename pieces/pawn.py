@@ -8,10 +8,10 @@ class Pawn(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, color):
+    def get_moves(board, pos, color_value):
         moves = []
         x, y = pos
-        if color == Player.white:
+        if color_value == Player.white.value:
             if x == 6:
                 if board[x - 1][y] == 0:
                     moves.append((x - 1, y))

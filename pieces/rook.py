@@ -6,14 +6,14 @@ class Rook(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, color):
+    def get_moves(board, pos, color_value):
         moves = []
         x, y = pos
         # Down
         for i in range (x + 1, 8):
             if board[i][y] == 0:
                 moves.append((i, y))
-            elif board[i][y] * color.value < 0:
+            elif board[i][y] * color_value < 0:
                 moves.append((i, y))
                 break
             else:
@@ -22,7 +22,7 @@ class Rook(Piece):
         for i in range (x - 1, -1, -1):
             if board[i][y] == 0:
                 moves.append((i, y))
-            elif board[i][y] * color.value < 0:
+            elif board[i][y] * color_value < 0:
                 moves.append((i, y))
                 break
             else:
@@ -31,7 +31,7 @@ class Rook(Piece):
         for i in range (y + 1, 8):
             if board[x][i] == 0:
                 moves.append((x, i))
-            elif board[x][i] * color.value < 0:
+            elif board[x][i] * color_value < 0:
                 moves.append((x, i))
                 break
             else:
@@ -40,7 +40,7 @@ class Rook(Piece):
         for i in range (y - 1, -1, -1):
             if board[x][i] == 0:
                 moves.append((x, i))
-            elif board[x][i] * color.value < 0:
+            elif board[x][i] * color_value < 0:
                 moves.append((x, i))
                 break
             else:

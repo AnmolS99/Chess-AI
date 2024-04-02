@@ -8,10 +8,10 @@ class Knight(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, color):
+    def get_moves(board, pos, color_value):
         moves = []
         x, y = pos
-        if color == Player.white:
+        if color_value == Player.white.value:
             if x > 1:
                 if y > 0 and board[x - 2][y - 1] <= 0:
                     moves.append((x - 2, y - 1))

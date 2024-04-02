@@ -1,4 +1,5 @@
 from tkinter import Canvas, PhotoImage, Tk
+from chess_board import ChessBoard
 
 from player import Player
 
@@ -6,7 +7,7 @@ from player import Player
 class ChessGUI:
 
 
-    def __init__(self, game, board_size=640, info_size=50):
+    def __init__(self, game: ChessBoard, board_size=640, info_size=50):
         self.game = game
         self.board_size = board_size
         self.info_size = info_size
@@ -26,7 +27,7 @@ class ChessGUI:
                 if (row + col) % 2 == 0:
                     color = "white"
                 else:
-                    color = "grey"
+                    color = "#5f6087"
                 self.canvas.create_rectangle(
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, fill=color
                 )
@@ -40,12 +41,18 @@ class ChessGUI:
             for move in self.game.get_possible_moves(self.selected_pos):
                 row, col = move
                 self.canvas.create_rectangle(
-                    col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, outline="red"
+                    col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, outline="red", width=3
                 )
         # Display player info
         player_color = self.game.turn.name
         self.canvas.create_text(60, self.info_size // 2, text=f"Player: Black", font=("Arial", 18))
         self.canvas.create_text(60, self.board_size + self.info_size + self.info_size // 2, text=f"Player: White", font=("Arial", 18))
+
+        # Display check info
+        if self.game.is_in_check(self.game.board, Player.black):
+            self.canvas.create_text(300, self.info_size // 2, text="Black player in check!", font=("Arial", 18))
+        if self.game.is_in_check(self.game.board, Player.white):
+            self.canvas.create_text(300, self.board_size + self.info_size + self.info_size // 2, text="White player in check!", font=("Arial", 18))
 
         # Display captured pieces as small icons
         self.subsampled_images.clear()
@@ -64,7 +71,7 @@ class ChessGUI:
 
     def on_click(self, event):
         # If below the board, do nothing
-        if event.y > self.board_size + self.info_size:
+        if event.y > self.board_size + self.info_size or event.y < self.info_size:
             return
         col = event.x // self.square_size
         row = (event.y - self.info_size) // self.square_size # Account for the space above the board
@@ -73,6 +80,9 @@ class ChessGUI:
             if (row, col) in self.game.get_possible_moves(self.selected_pos):
                 self.game.move_piece(self.selected_pos, (row, col))
             self.selected_pos = None
-        else:
+        elif self.game.board[row][col] * self.game.turn.value > 0:
             self.selected_pos = (row, col)
+        else:
+            self.selected_pos = None
+            return
         self.print_game()
