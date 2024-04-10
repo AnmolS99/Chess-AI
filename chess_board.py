@@ -30,41 +30,47 @@ class ChessBoard:
         self.captured_pieces = {Player.white: [], Player.black: []}
         self.king_position = {Player.white: (7, 4), Player.black: (0, 4)}
 
-
-    def get_legal_moves(self):
+    """Returns all legals moves for a selected piece (in a position)"""
+    def get_legal_moves(self, selected_pos):
         legal_moves = []
-        for row in range(8):
-            for col in range(8):
-                if self.board[row][col] * self.turn.value > 0:
-                    for move in self.get_possible_moves((row, col)):
-                        if not self.is_in_check(self.hypotetical_move_piece(self.board.copy(), (row, col), move), self.turn.value):
-                            legal_moves.append(((row, col), move))
+        if self.board[selected_pos] * self.turn.value > 0:
+            for move in self.get_possible_moves(selected_pos):
+                hypotetical_board, hypotetical_king_position = self.hypotetical_move_piece(self.board.copy(), self.king_position.copy(), selected_pos, move, self.turn)
+                if not self.is_in_check(hypotetical_board, self.turn, hypotetical_king_position):
+                    legal_moves.append(move)
         return legal_moves
     
-    """Returns all possible moves for a selected piece. NOTE that this function does not check if the move puts the king in check."""
-    def get_possible_moves(self, selected_pos, color_value=None, ignore_turn=False):
+    """Returns all possible moves for a selected piece (in a position). NOTE that this function does not check if the move puts the king in check."""
+    def get_possible_moves(self, selected_pos, board=None, color_value=None, ignore_turn=False):
         if color_value is None:
             color_value = self.turn.value
-        selected_piece = self.board[selected_pos]
+        if board is None:
+            board = self.board
+        selected_piece = board[selected_pos]
         if selected_piece == 0:
             return []
         elif not ignore_turn and color_value * selected_piece < 0:
             return []
         else:
-            return piece_dict[abs(selected_piece)].get_moves(self.board, selected_pos, color_value)
+            return piece_dict[abs(selected_piece)].get_moves(board, selected_pos, color_value)
     
+    """Returns all possible moves for a player. NOTE that this function does not check if the move puts the king in check."""
     def get_all_possible_moves(self, board, color_value):
         all_possible_moves = []
         for row in range(8):
             for col in range(8):
                 if board[row][col] * color_value > 0:
-                    all_possible_moves.extend(self.get_possible_moves((row, col), color_value, ignore_turn=True))
+                    all_possible_moves.extend(self.get_possible_moves((row, col), board, color_value, ignore_turn=True))
         return all_possible_moves
-        
-    def is_in_check(self, board, color):
-        king_pos = self.king_position[color]
+    
+    """Returns all possible moves for a player. NOTE that this function does not check if the move puts the king in check."""
+    def is_in_check(self, board, turn, king_position=None):
+        if king_position is None:
+            king_pos = self.king_position[turn]
+        else:
+            king_pos = king_position[turn]
         if king_pos is not None:
-            return king_pos in self.get_all_possible_moves(board, -color.value)
+            return king_pos in self.get_all_possible_moves(board, -turn.value)
         return False
     
     def hypotetical_is_in_check(self, board, color):
@@ -83,7 +89,10 @@ class ChessBoard:
             self.king_position[self.turn] = end_pos
         self.turn = Player.white if self.turn == Player.black else Player.black
     
-    def hypotetical_move_piece(self, board, start_pos, end_pos):
+    def hypotetical_move_piece(self, board, king_position, start_pos, end_pos, turn):
+        piece = self.board[start_pos]
         board[end_pos] = board[start_pos]
         board[start_pos] = 0
-        return board
+        if abs(piece) == 6:
+            king_position[turn] = end_pos
+        return board, king_position
