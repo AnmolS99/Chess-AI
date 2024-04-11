@@ -21,6 +21,9 @@ class ChessBoard:
         # Reset white pieces
         self.board[6][:] = np.ones(8)
         self.board[7][:] = np.array([2, 3, 4, 5, 6, 4, 3, 2])
+
+        # This one-liner sets rows 2 to 5 to 0
+        self.board[2:6][:] = 0
         
         # Reset black pieces
         self.board[1][:] = -np.ones(8)
@@ -39,6 +42,15 @@ class ChessBoard:
                 if not self.is_in_check(hypotetical_board, self.turn, hypotetical_king_position):
                     legal_moves.append(move)
         return legal_moves
+    
+    """Returns all legals moves for a player"""
+    def get_all_legal_moves(self):
+        all_legal_moves = []
+        for row in range(8):
+            for col in range(8):
+                if self.board[row][col] * self.turn.value > 0:
+                    all_legal_moves.extend(self.get_legal_moves((row, col)))
+        return all_legal_moves
     
     """Returns all possible moves for a selected piece (in a position). NOTE that this function does not check if the move puts the king in check."""
     def get_possible_moves(self, selected_pos, board=None, color_value=None, ignore_turn=False):
@@ -72,6 +84,9 @@ class ChessBoard:
         if king_pos is not None:
             return king_pos in self.get_all_possible_moves(board, -turn.value)
         return False
+    
+    def is_checkmate(self):
+        return self.is_in_check(self.board, self.turn) and len(self.get_all_legal_moves()) == 0
     
     def hypotetical_is_in_check(self, board, color):
         king_pos = board.np.where(board == color.value * 6)
