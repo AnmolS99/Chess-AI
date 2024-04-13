@@ -6,7 +6,7 @@ class Rook(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, color_value):
+    def get_moves(board, pos, possible_en_passant, color_value):
         moves = []
         x, y = pos
         # Down
@@ -47,3 +47,7 @@ class Rook(Piece):
                 break
 
         return moves
+    
+    @staticmethod
+    def get_capture_moves(board, pos, possible_en_passant, color_value):
+        return Rook.get_moves(board, pos, possible_en_passant, color_value)

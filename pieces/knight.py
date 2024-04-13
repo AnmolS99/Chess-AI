@@ -8,7 +8,7 @@ class Knight(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, color_value):
+    def get_moves(board, pos, possible_en_passant, color_value):
         moves = []
         x, y = pos
         if color_value == Player.white.value:
@@ -54,3 +54,7 @@ class Knight(Piece):
                 if y < 6 and board[x + 1][y + 2] >= 0:
                     moves.append((x + 1, y + 2))
         return moves
+    
+    @staticmethod
+    def get_capture_moves(board, pos, possible_en_passant, color_value):
+        return Knight.get_moves(board, pos, possible_en_passant, color_value)

@@ -7,7 +7,7 @@ class King(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, color_value):
+    def get_moves(board, pos, possible_en_passant, color_value):
         moves = []
         x, y = pos
         if x > 0:
@@ -53,3 +53,7 @@ class King(Piece):
                     moves.append((x + 1, y + 1))
         
         return moves
+    
+    @staticmethod
+    def get_capture_moves(board, pos, possible_en_passant, color_value):
+        return King.get_moves(board, pos, possible_en_passant, color_value)

@@ -3,7 +3,7 @@ from pieces.piece import Piece
 class Queen(Piece):
     
     @staticmethod
-    def get_moves(board, pos, color_value):
+    def get_moves(board, pos, possible_en_passant, color_value):
         moves = []
         x, y = pos
         # Down
@@ -80,4 +80,8 @@ class Queen(Piece):
             else:
                 break
 
-        return moves        
+        return moves
+    
+    @staticmethod
+    def get_capture_moves(board, pos, possible_en_passant, color_value):
+        return Queen.get_moves(board, pos, possible_en_passant, color_value)
