@@ -72,22 +72,17 @@ class ChessGUI:
             self.subsampled_images.append(image)
             self.canvas.create_image(160 + i * 40, self.board_size + self.info_size + self.info_size // 2, image=image)
 
-        # Display check info
-        if self.game.is_in_check(self.game.board, Player.black):
-            self.canvas.create_text(300, self.info_size // 2, text="Black player in check!", font=("Arial", 18))
-        if self.game.is_in_check(self.game.board, Player.white):
-            self.canvas.create_text(300, self.board_size + self.info_size + self.info_size // 2, text="White player in check!", font=("Arial", 18))
-
-
-
         # Display checkmate info
         if self.game.is_checkmate():
             winner_player = "white" if self.game.turn == Player.black else "black"
             self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
             self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Checkmate! {winner_player} wins!", font=("Arial", 26))
             self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top left corner to begin a new game", font=("Arial", 18))
-            
-
+        # Display check info
+        elif self.game.is_in_check(self.game.board, Player.black):
+            self.canvas.create_text(300, self.info_size // 2, text="Black player in check!", font=("Arial", 18))
+        elif self.game.is_in_check(self.game.board, Player.white):
+            self.canvas.create_text(300, self.board_size + self.info_size + self.info_size // 2, text="White player in check!", font=("Arial", 18))
         self.root.mainloop()
         
 
