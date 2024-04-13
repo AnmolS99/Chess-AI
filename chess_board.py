@@ -119,12 +119,6 @@ class ChessBoard:
     def is_checkmate(self):
         return self.is_in_check(self.board, self.turn) and len(self.get_all_legal_moves()) == 0
     
-    def hypotetical_is_in_check(self, board, color): # Check if this function is needed
-        king_pos = board.np.where(board == color.value * 6)
-        if king_pos is not None:
-            return king_pos in self.get_all_possible_moves(board, -color.value)
-        return False
-    
     def move_piece(self, start_pos, end_pos):
         piece = self.board[start_pos]
         self.board[start_pos] = 0
