@@ -1,6 +1,6 @@
 # Chess ♟️
 
-A personal project attempting chess programming
+A personal project for learning chess programming.
 
 ## Terminology
 
