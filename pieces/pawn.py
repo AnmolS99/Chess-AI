@@ -8,7 +8,7 @@ class Pawn(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, possible_en_passant, color_value):
+    def get_moves(board, pos, possible_en_passant, castling_rights, opp_capture_moves, color_value):
         moves = []
         x, y = pos
         if color_value == Player.white.value:

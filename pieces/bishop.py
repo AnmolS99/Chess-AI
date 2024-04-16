@@ -7,7 +7,7 @@ class Bishop(Piece):
         super().__init__()
 
     @staticmethod
-    def get_moves(board, pos, possible_en_passant, color_value):
+    def get_moves(board, pos, possible_en_passant, castling_rights, opp_capture_moves, color_value):
         moves = []
         x, y = pos
         # Diagonally down-right
@@ -51,4 +51,4 @@ class Bishop(Piece):
     
     @staticmethod
     def get_capture_moves(board, pos, possible_en_passant, color_value):
-        return Bishop.get_moves(board, pos, possible_en_passant, color_value)
+        return Bishop.get_moves(board, pos, possible_en_passant, None, None, color_value)
