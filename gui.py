@@ -13,6 +13,9 @@ class ChessGUI:
         self.game = game
         self.board_size = board_size
         self.info_size = info_size
+        self.show_promotion = False
+        self.promotion_piece = None
+        self.promotion_to_square = None
         self.selected_pos = None
         self.root = Tk()
         self.canvas = Canvas(self.root, width=board_size, height=board_size + info_size*2)
@@ -79,11 +82,21 @@ class ChessGUI:
             self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
             self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Checkmate! {winner_player} wins!", font=("Arial", 26))
             self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+        
         # Display check info
         elif self.game.is_in_check(self.game.board, Player.black):
             self.canvas.create_text(300, self.info_size // 2, text="Black player in check!", font=("Arial", 18))
         elif self.game.is_in_check(self.game.board, Player.white):
             self.canvas.create_text(300, self.board_size + self.info_size + self.info_size // 2, text="White player in check!", font=("Arial", 18))
+        
+        # Display promotion options
+        if self.show_promotion:
+            self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
+            self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) - 50, text="Choose a piece to promote to", font=("Arial", 26))
+            self.canvas.create_image(150, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[2])
+            self.canvas.create_image(250, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[3])
+            self.canvas.create_image(350, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[4])
+            self.canvas.create_image(450, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[5])
         
         print("Available moves: " + str(len(self.game.get_all_legal_moves())))
 
@@ -91,6 +104,24 @@ class ChessGUI:
         
 
     def on_click(self, event):
+        if self.show_promotion and self.promotion_piece is None:
+            y_range_start = ((self.board_size + self.info_size) // 2)
+            y_range_end = ((self.board_size + self.info_size) // 2) + 100
+            if 100 < event.x <= 200 and y_range_start < event.y < y_range_end:
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 2))
+            elif 200 < event.x <= 300 and y_range_start < event.y < y_range_end:
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 3))
+            elif 300 < event.x <= 400 and y_range_start < event.y < y_range_end:
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 4))
+            elif 400 < event.x <= 500 and y_range_start < event.y < y_range_end:
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 5))
+            
+            self.selected_pos = None
+            self.show_promotion = False
+            self.promotion_piece = None
+            self.promotion_to_square = None
+            self.print_game()
+            return
         # If below the board, do nothing
         if event.y > self.board_size + self.info_size:
             return
@@ -107,10 +138,18 @@ class ChessGUI:
         print(f"Clicked on {row}, {col}")
         if self.selected_pos is not None:
             piece = self.game.board[self.selected_pos]
-            move = Move(self.selected_pos, (row, col), piece)   # TODO: Update this to be whatever piece chosen by user in case of pawn promotion
-            if move in self.game.get_legal_moves(self.selected_pos):
-                self.game.move_piece(move)
-            self.selected_pos = None
+            # If attempting promotion
+            if (piece == 1 and row == 0) or (piece == -1 and row == 7):
+                promotion_move = Move(self.selected_pos, (row, col), 5 * self.game.turn.value)
+                if promotion_move in self.game.get_legal_moves(self.selected_pos):
+                    # If promotion legal
+                    self.show_promotion = True
+                    self.promotion_to_square = (row, col)
+            else:
+                move = Move(self.selected_pos, (row, col), piece)   # TODO: Update this to be whatever piece chosen by user in case of pawn promotion
+                if move in self.game.get_legal_moves(self.selected_pos):
+                    self.game.move_piece(move)
+                self.selected_pos = None
         elif self.game.board[row][col] * self.game.turn.value > 0:
             self.selected_pos = (row, col)
         else:
