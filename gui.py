@@ -83,6 +83,9 @@ class ChessGUI:
             self.canvas.create_text(300, self.info_size // 2, text="Black player in check!", font=("Arial", 18))
         elif self.game.is_in_check(self.game.board, Player.white):
             self.canvas.create_text(300, self.board_size + self.info_size + self.info_size // 2, text="White player in check!", font=("Arial", 18))
+        
+        print("Available moves: " + str(len(self.game.get_all_legal_moves())))
+
         self.root.mainloop()
         
 

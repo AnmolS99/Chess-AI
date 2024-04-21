@@ -133,6 +133,7 @@ class ChessBoard:
             self.captured_pieces[self.turn].append(self.board[(start_pos[0], end_pos[1])])
             self.board[(start_pos[0], end_pos[1])] = 0
         self.board[end_pos] = piece
+
         # If king moves, update king position
         if abs(piece) == 6:
             self.king_position[self.turn] = end_pos
@@ -148,6 +149,18 @@ class ChessBoard:
                     rook_piece = self.board[(end_pos[0], 7)]
                     self.board[(end_pos[0], 7)] = 0
                     self.board[(end_pos[0], 5)] = rook_piece
+                
+                # Remove all castling rights
+                self.castling_rights[self.turn]["king_side"] = False
+                self.castling_rights[self.turn]["queen_side"] = False
+        
+        # If rook moves, remove castling rights
+        if abs(piece) == 2:
+            if (self.turn == Player.white and start_pos == (7, 0)) or (self.turn == Player.black and start_pos == (0, 0)):
+                self.castling_rights[self.turn]["queen_side"] = False
+            elif (self.turn == Player.white and start_pos == (7, 7)) or (self.turn == Player.black and start_pos == (0, 7)):
+                self.castling_rights[self.turn]["king_side"] = False
+
 
         # If pawn moves two squares, update possible en passant square
         if abs(piece) == 1 and abs(start_pos[0] - end_pos[0]) == 2:
@@ -176,6 +189,7 @@ class ChessBoard:
                     rook_piece = board[(end_pos[0], 7)]
                     board[(end_pos[0], 7)] = 0
                     board[(end_pos[0], 5)] = rook_piece
+                
         if abs(piece) == 1 and abs(start_pos[0] - end_pos[0]) == 2:
             possible_en_passant = end_pos
         else:
