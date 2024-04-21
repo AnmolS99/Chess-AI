@@ -94,11 +94,12 @@ class ChessGUI:
         # If below the board, do nothing
         if event.y > self.board_size + self.info_size:
             return
-        # If clicked on the reset button
-        elif self.board_size - 100 < event.x < self.board_size and self.info_size // 2 - 20 < event.y < self.info_size // 2 + 20:
-            print("Game reset")
+        elif event.y < self.info_size:
+            # If clicked on the reset button
+            if self.board_size - 100 < event.x < self.board_size and self.info_size // 2 - 20 < event.y < self.info_size // 2 + 20:
+                print("Game reset")
+                self.game.reset_board()
             self.selected_pos = None
-            self.game.reset_board()
             self.print_game()
             return
         col = event.x // self.square_size
