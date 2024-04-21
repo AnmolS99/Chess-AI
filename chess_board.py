@@ -1,4 +1,5 @@
 import numpy as np
+from move import Move
 from player import Player
 from pieces.pawn import Pawn
 from pieces.rook import Rook
@@ -42,7 +43,7 @@ class ChessBoard:
         legal_moves = []
         if self.board[selected_pos] * self.turn.value > 0:
             for move in self.get_possible_moves(selected_pos):
-                hypotetical_board, hypotetical_king_position, hypotetical_en_passant = self.hypotetical_move_piece(self.board.copy(), self.king_position.copy(), selected_pos, move, self.turn)
+                hypotetical_board, hypotetical_king_position, hypotetical_en_passant = self.hypotetical_move_piece(self.board.copy(), self.king_position.copy(), move, self.turn)
                 if not self.is_in_check(hypotetical_board, self.turn, hypotetical_king_position, hypotetical_en_passant):
                     legal_moves.append(move)
         return legal_moves
@@ -51,7 +52,7 @@ class ChessBoard:
     def get_all_legal_moves(self):
         all_legal_moves = []
         for row in range(8):
-            for col in range(8):
+            for col in range(8):    # Maybe change these two for-loops to one that only look at the positions of the current players pieces
                 if self.board[row][col] * self.turn.value > 0:
                     all_legal_moves.extend(self.get_legal_moves((row, col)))
         return all_legal_moves
@@ -103,7 +104,7 @@ class ChessBoard:
     def get_all_possible_capture_moves(self, board, color_value, possible_en_passant):
         all_possible_capture_moves = []
         for row in range(8):
-            for col in range(8):
+            for col in range(8): # Maybe change these two for-loops to one that only look at the positions of the current players pieces
                 if board[row][col] * color_value > 0:
                     all_possible_capture_moves.extend(self.get_possible_capture_moves((row, col), board, color_value, possible_en_passant, ignore_turn=True))
         return all_possible_capture_moves
@@ -118,14 +119,16 @@ class ChessBoard:
         else:
             en_passant = possible_en_passant
         if king_pos is not None:
-            return king_pos in self.get_all_possible_capture_moves(board, -turn.value, en_passant)
+            return king_pos in [move.end_pos for move in self.get_all_possible_capture_moves(board, -turn.value, en_passant)]
         return False
     
     def is_checkmate(self):
         return self.is_in_check(self.board, self.turn) and len(self.get_all_legal_moves()) == 0
     
-    def move_piece(self, start_pos, end_pos):
-        piece = self.board[start_pos]
+    def move_piece(self, move: Move):
+        start_pos = move.start_pos
+        end_pos = move.end_pos
+        piece = move.end_piece
         self.board[start_pos] = 0
         if self.board[end_pos] != 0:
             self.captured_pieces[self.turn].append(self.board[end_pos])
@@ -169,8 +172,10 @@ class ChessBoard:
             self.possible_en_passant = None
         self.turn = Player.white if self.turn == Player.black else Player.black
     
-    def hypotetical_move_piece(self, board, king_position, start_pos, end_pos, turn):
-        piece = board[start_pos]
+    def hypotetical_move_piece(self, board, king_position, move: Move, turn):
+        start_pos = move.start_pos
+        end_pos = move.end_pos
+        piece = move.end_piece
         board[start_pos] = 0
         if abs(piece) == 1 and board[end_pos] == 0 and start_pos[1] != end_pos[1]:
             board[(start_pos[0], end_pos[1])] = 0

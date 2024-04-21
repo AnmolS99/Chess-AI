@@ -1,6 +1,8 @@
-from pieces.piece import Piece
+from move import Move
 from player import Player
+from pieces.piece import Piece
 
+piece_int = 3
 
 class Knight(Piece):
 
@@ -9,50 +11,51 @@ class Knight(Piece):
 
     @staticmethod
     def get_moves(board, pos, possible_en_passant, castling_rights, opp_capture_moves, color_value):
+        piece_value = piece_int * color_value
         moves = []
         x, y = pos
         if color_value == Player.white.value:
             if x > 1:
                 if y > 0 and board[x - 2][y - 1] <= 0:
-                    moves.append((x - 2, y - 1))
+                    moves.append(Move(pos, (x - 2, y - 1), piece_value))
                 if y < 7 and board[x - 2][y + 1] <= 0:
-                    moves.append((x - 2, y + 1))
+                    moves.append(Move(pos, (x - 2, y + 1), piece_value))
             if x > 0:
                 if y > 1 and board[x - 1][y - 2] <= 0:
-                    moves.append((x - 1, y - 2))
+                    moves.append(Move(pos, (x - 1, y - 2), piece_value))
                 if y < 6 and board[x - 1][y + 2] <= 0:
-                    moves.append((x - 1, y + 2))
+                    moves.append(Move(pos, (x - 1, y + 2), piece_value))
             if x < 6:
                 if y > 0 and board[x + 2][y - 1] <= 0:
-                    moves.append((x + 2, y - 1))
+                    moves.append(Move(pos, (x + 2, y - 1), piece_value))
                 if y < 7 and board[x + 2][y + 1] <= 0:
-                    moves.append((x + 2, y + 1))
+                    moves.append(Move(pos, (x + 2, y + 1), piece_value))
             if x < 7:
                 if y > 1 and board[x + 1][y - 2] <= 0:
-                    moves.append((x + 1, y - 2))
+                    moves.append(Move(pos, (x + 1, y - 2), piece_value))
                 if y < 6 and board[x + 1][y + 2] <= 0:
-                    moves.append((x + 1, y + 2))
+                    moves.append(Move(pos, (x + 1, y + 2), piece_value))
         else:
             if x > 1:
                 if y > 0 and board[x - 2][y - 1] >= 0:
-                    moves.append((x - 2, y - 1))
+                    moves.append(Move(pos, (x - 2, y - 1), piece_value))
                 if y < 7 and board[x - 2][y + 1] >= 0:
-                    moves.append((x - 2, y + 1))
+                    moves.append(Move(pos, (x - 2, y + 1), piece_value))
             if x > 0:
                 if y > 1 and board[x - 1][y - 2] >= 0:
-                    moves.append((x - 1, y - 2))
+                    moves.append(Move(pos, (x - 1, y - 2), piece_value))
                 if y < 6 and board[x - 1][y + 2] >= 0:
-                    moves.append((x - 1, y + 2))
+                    moves.append(Move(pos, (x - 1, y + 2), piece_value))
             if x < 6:
                 if y > 0 and board[x + 2][y - 1] >= 0:
-                    moves.append((x + 2, y - 1))
+                    moves.append(Move(pos, (x + 2, y - 1), piece_value))
                 if y < 7 and board[x + 2][y + 1] >= 0:
-                    moves.append((x + 2, y + 1))
+                    moves.append(Move(pos, (x + 2, y + 1), piece_value))
             if x < 7:
                 if y > 1 and board[x + 1][y - 2] >= 0:
-                    moves.append((x + 1, y - 2))
+                    moves.append(Move(pos, (x + 1, y - 2), piece_value))
                 if y < 6 and board[x + 1][y + 2] >= 0:
-                    moves.append((x + 1, y + 2))
+                    moves.append(Move(pos, (x + 1, y + 2), piece_value))
         return moves
     
     @staticmethod

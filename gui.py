@@ -2,6 +2,7 @@ from PIL import Image, ImageTk, ImageDraw
 from tkinter import Canvas, PhotoImage, Tk
 from chess_board import ChessBoard
 
+from move import Move
 from player import Player
 
 
@@ -44,7 +45,7 @@ class ChessGUI:
         # Display selected piece legal moves
         if self.selected_pos is not None:
             for move in self.game.get_legal_moves(self.selected_pos):
-                row, col = move
+                row, col = move.end_pos
                 self.canvas.create_rectangle(
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, outline="red", width=3
                 )
@@ -104,8 +105,10 @@ class ChessGUI:
         row = (event.y - self.info_size) // self.square_size # Account for the space above the board
         print(f"Clicked on {row}, {col}")
         if self.selected_pos is not None:
-            if (row, col) in self.game.get_legal_moves(self.selected_pos):
-                self.game.move_piece(self.selected_pos, (row, col))
+            piece = self.game.board[self.selected_pos]
+            move = Move(self.selected_pos, (row, col), piece)   # TODO: Update this to be whatever piece chosen by user in case of pawn promotion
+            if move in self.game.get_legal_moves(self.selected_pos):
+                self.game.move_piece(move)
             self.selected_pos = None
         elif self.game.board[row][col] * self.game.turn.value > 0:
             self.selected_pos = (row, col)
