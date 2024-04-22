@@ -153,9 +153,9 @@ class ChessBoard:
                     self.board[(end_pos[0], 7)] = 0
                     self.board[(end_pos[0], 5)] = rook_piece
                 
-                # Remove all castling rights
-                self.castling_rights[self.turn]["king_side"] = False
-                self.castling_rights[self.turn]["queen_side"] = False
+            # Remove all castling rights
+            self.castling_rights[self.turn]["king_side"] = False
+            self.castling_rights[self.turn]["queen_side"] = False
         
         # If rook moves, remove castling rights
         if abs(piece) == 2:
