@@ -93,10 +93,10 @@ class ChessGUI:
         if self.show_promotion:
             self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
             self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) - 50, text="Choose a piece to promote to", font=("Arial", 26))
-            self.canvas.create_image(150, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[2])
-            self.canvas.create_image(250, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[3])
-            self.canvas.create_image(350, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[4])
-            self.canvas.create_image(450, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[5])
+            self.canvas.create_image(150, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[2*self.game.turn.value])
+            self.canvas.create_image(250, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[3*self.game.turn.value])
+            self.canvas.create_image(350, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[4*self.game.turn.value])
+            self.canvas.create_image(450, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[5*self.game.turn.value])
         
         print("Available moves: " + str(len(self.game.get_all_legal_moves())))
 
@@ -108,13 +108,13 @@ class ChessGUI:
             y_range_start = ((self.board_size + self.info_size) // 2)
             y_range_end = ((self.board_size + self.info_size) // 2) + 100
             if 100 < event.x <= 200 and y_range_start < event.y < y_range_end:
-                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 2))
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 2*self.game.turn.value))
             elif 200 < event.x <= 300 and y_range_start < event.y < y_range_end:
-                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 3))
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 3*self.game.turn.value))
             elif 300 < event.x <= 400 and y_range_start < event.y < y_range_end:
-                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 4))
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 4*self.game.turn.value))
             elif 400 < event.x <= 500 and y_range_start < event.y < y_range_end:
-                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 5))
+                self.game.move_piece(Move(self.selected_pos, self.promotion_to_square, 5*self.game.turn.value))
             
             self.selected_pos = None
             self.show_promotion = False
