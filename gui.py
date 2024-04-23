@@ -99,8 +99,6 @@ class ChessGUI:
             self.canvas.create_image(450, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[5*self.game.turn.value])
         
         print("Available moves: " + str(len(self.game.get_all_legal_moves())))
-
-        self.root.mainloop()
         
 
     def on_click(self, event):

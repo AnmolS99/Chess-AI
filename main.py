@@ -10,6 +10,7 @@ def main():
     game.reset_board()
     ui = ChessGUI(game)
     ui.print_game()
+    ui.root.mainloop()
 
 if __name__ == '__main__':
     main()
