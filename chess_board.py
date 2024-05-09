@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 from move import Move
 from player import Player
@@ -200,3 +201,13 @@ class ChessBoard:
         else:
             possible_en_passant = None
         return board, king_position, possible_en_passant
+    
+    def copy(self):
+        new_board = copy.deepcopy(ChessBoard())
+        new_board.board = copy.deepcopy(self.board)
+        new_board.turn = copy.deepcopy(self.turn)
+        new_board.captured_pieces = copy.deepcopy(self.captured_pieces)
+        new_board.king_position = copy.deepcopy(self.king_position)
+        new_board.possible_en_passant = copy.deepcopy(self.possible_en_passant)
+        new_board.castling_rights = copy.deepcopy(self.castling_rights)
+        return new_board

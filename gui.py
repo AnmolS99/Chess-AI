@@ -38,7 +38,7 @@ class ChessGUI:
                 self.canvas.create_rectangle(
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, fill=color
                 )
-                piece = self.game.board[row][col]
+                piece = int(self.game.board[row][col])
                 if piece != 0:
 
                     self.canvas.create_image(
@@ -97,8 +97,6 @@ class ChessGUI:
             self.canvas.create_image(250, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[3*self.game.turn.value])
             self.canvas.create_image(350, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[4*self.game.turn.value])
             self.canvas.create_image(450, ((self.board_size + self.info_size) // 2) + 50, image=self.icon_dict[5*self.game.turn.value])
-        
-        print("Available moves: " + str(len(self.game.get_all_legal_moves())))
         
 
     def on_click(self, event):

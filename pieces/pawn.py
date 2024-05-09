@@ -25,19 +25,19 @@ class Pawn(Piece):
                 if board[x - 1][y] == 0:
                     if x == 1:
                         for promotion_piece in promotion_pieces_value:
-                            moves.append(Move(pos, (x - 1, y), promotion_piece))    
+                            moves.append(Move(pos, (x - 1, y), promotion_piece, promotion=True))    
                     else:
                         moves.append(Move(pos, (x - 1, y), piece_value))
             if y > 0 and board[x - 1][y - 1] < 0:
                 if x == 1:
                     for promotion_piece in promotion_pieces_value:
-                        moves.append(Move(pos, (x - 1, y - 1), promotion_piece))    
+                        moves.append(Move(pos, (x - 1, y - 1), promotion_piece, promotion=True))    
                 else:
                     moves.append(Move(pos, (x - 1, y - 1), piece_value))
             if y < 7 and board[x - 1][y + 1] < 0:
                 if x == 1:
                     for promotion_piece in promotion_pieces_value:
-                        moves.append(Move(pos, (x - 1, y + 1), promotion_piece))    
+                        moves.append(Move(pos, (x - 1, y + 1), promotion_piece, promotion=True))    
                 else:
                     moves.append(Move(pos, (x - 1, y + 1), piece_value))
             if possible_en_passant is not None:
@@ -54,19 +54,19 @@ class Pawn(Piece):
                 if board[x + 1][y] == 0:
                     if x == 6:
                         for promotion_piece in promotion_pieces_value:
-                            moves.append(Move(pos, (x + 1, y), promotion_piece))    
+                            moves.append(Move(pos, (x + 1, y), promotion_piece, promotion=True))    
                     else:
                         moves.append(Move(pos, (x + 1, y), piece_value))
             if y > 0 and board[x + 1][y - 1] > 0:
                 if x == 6:
                     for promotion_piece in promotion_pieces_value:
-                        moves.append(Move(pos, (x + 1, y - 1), promotion_piece))    
+                        moves.append(Move(pos, (x + 1, y - 1), promotion_piece, promotion=True))    
                 else:
                     moves.append(Move(pos, (x + 1, y - 1), piece_value))
             if y < 7 and board[x + 1][y + 1] > 0:
                 if x == 6:
                     for promotion_piece in promotion_pieces_value:
-                        moves.append(Move(pos, (x + 1, y + 1), promotion_piece))    
+                        moves.append(Move(pos, (x + 1, y + 1), promotion_piece, promotion=True))    
                 else:
                     moves.append(Move(pos, (x + 1, y + 1), piece_value))
             if possible_en_passant is not None:
