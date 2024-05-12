@@ -2,7 +2,6 @@ import time
 from chess_board import ChessBoard
 from fen_converter import FENConverter
 from gui import ChessGUI
-import os
 
 @staticmethod
 def move_sim(game: ChessBoard, ui, curr_depth: int, final_depth: int):
@@ -43,21 +42,15 @@ def main():
     with open('./output/my_program_output.txt', 'w'):
         pass
     
-    # ui.print_game()
-    # ui.root.update()  # Update the GUI
-    # ui.root.mainloop()
+    ui.print_game()
+    ui.root.update()  # Update the GUI
+    ui.root.mainloop()
     
-    for i in range(1, 4):   # TODO: Number of nodes for Postiton 5 fails here
-        start = time.time()
-        num_nodes = move_sim(game, ui, 0, i)
-        end = time.time()
-        print(f"Depth {i}: {num_nodes} nodes ({end-start}) seconds")
-
-    # start = time.time()
-    # depth = 4
-    # num_nodes = move_sim(game, ui, 0, depth)
-    # end = time.time()
-    # print(f"Depth {depth}: {num_nodes} nodes ({end-start}) seconds")
+    # for i in range(1, 4):
+    #     start = time.time()
+    #     num_nodes = move_sim(game, ui, 0, i)
+    #     end = time.time()
+    #     print(f"Depth {i}: {num_nodes} nodes ({end-start}) seconds")
 
 if __name__ == '__main__':
     main()

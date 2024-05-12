@@ -9,16 +9,18 @@ from player import Player
 class ChessGUI:
 
 
-    def __init__(self, game: ChessBoard, board_size=640, info_size=50):
+    def __init__(self, game: ChessBoard, board_size=640, player_info_size=50, game_info_size=20):
         self.game = game
         self.board_size = board_size
-        self.info_size = info_size
+        self.player_info_size = player_info_size
+        self.game_info_size = game_info_size
+        self.info_size = self.player_info_size + self.game_info_size 
         self.show_promotion = False
         self.promotion_piece = None
         self.promotion_to_square = None
         self.selected_pos = None
         self.root = Tk()
-        self.canvas = Canvas(self.root, width=board_size, height=board_size + info_size*2)
+        self.canvas = Canvas(self.root, width=board_size, height=board_size + player_info_size*2 + game_info_size)
         self.square_size = board_size // 8
         self.canvas.pack()
         self.subsampled_images = []
@@ -55,12 +57,12 @@ class ChessGUI:
 
         # Display player info
         player_color = self.game.turn.name
-        self.canvas.create_text(60, self.info_size // 2, text=f"Player: Black", font=("Arial", 18))
-        self.canvas.create_text(60, self.board_size + self.info_size + self.info_size // 2, text=f"Player: White", font=("Arial", 18))
+        self.canvas.create_text(60, (self.player_info_size // 2) + self.game_info_size, text=f"Player: Black", font=("Arial", 18))
+        self.canvas.create_text(60, self.board_size + self.info_size + self.player_info_size // 2, text=f"Player: White", font=("Arial", 18))
 
         # Button to reset the game
-        self.canvas.create_rectangle(self.board_size - 100, self.info_size // 2 - 20, self.board_size, self.info_size // 2 + 20, fill="green")
-        self.canvas.create_text(self.board_size - 50, self.info_size // 2, text="Reset", font=("Arial", 18))
+        self.canvas.create_rectangle(self.board_size - 100, (self.player_info_size // 2) + self.game_info_size - 20, self.board_size, (self.player_info_size // 2) + self.game_info_size + 20, fill="green")
+        self.canvas.create_text(self.board_size - 50, (self.player_info_size // 2) + self.game_info_size, text="Reset", font=("Arial", 18))
 
 
 
@@ -69,12 +71,12 @@ class ChessGUI:
         for i, piece in enumerate(self.game.captured_pieces[Player.black]):
             image = self.icon_dict[piece].subsample(2, 2)  # Reduce the size of the image by a factor of 2
             self.subsampled_images.append(image)
-            self.canvas.create_image(160 + i * 40, self.info_size // 2, image=image)
+            self.canvas.create_image(160 + i * 40, (self.player_info_size // 2) + self.game_info_size, image=image)
 
         for i, piece in enumerate(self.game.captured_pieces[Player.white]):
             image = self.icon_dict[piece].subsample(2, 2)  # Reduce the size of the image by a factor of 2
             self.subsampled_images.append(image)
-            self.canvas.create_image(160 + i * 40, self.board_size + self.info_size + self.info_size // 2, image=image)
+            self.canvas.create_image(160 + i * 40, self.board_size + self.info_size + self.player_info_size // 2, image=image)
 
         # Display checkmate info
         if self.game.is_checkmate():
@@ -85,9 +87,9 @@ class ChessGUI:
         
         # Display check info
         elif self.game.is_in_check(self.game.board, Player.black):
-            self.canvas.create_text(300, self.info_size // 2, text="Black player in check!", font=("Arial", 18))
+            self.canvas.create_text(300, self.game_info_size // 2, text="Black player in check!", font=("Arial", 18))
         elif self.game.is_in_check(self.game.board, Player.white):
-            self.canvas.create_text(300, self.board_size + self.info_size + self.info_size // 2, text="White player in check!", font=("Arial", 18))
+            self.canvas.create_text(300, self.game_info_size, text="White player in check!", font=("Arial", 18))
         
         # Display promotion options
         if self.show_promotion:
@@ -123,7 +125,7 @@ class ChessGUI:
             return
         elif event.y < self.info_size:
             # If clicked on the reset button
-            if self.board_size - 100 < event.x < self.board_size and self.info_size // 2 - 20 < event.y < self.info_size // 2 + 20:
+            if self.board_size - 100 < event.x < self.board_size and (self.player_info_size // 2) + self.game_info_size - 20 < event.y < (self.player_info_size // 2) + self.game_info_size + 20:
                 print("Game reset")
                 self.game.reset_board()
             self.selected_pos = None
@@ -155,7 +157,7 @@ class ChessGUI:
 
     def get_shade_image(self):
         # Create a new image with the same size as the canvas
-        image = Image.new('RGBA', (self.board_size, self.board_size + self.info_size*2))
+        image = Image.new('RGBA', (self.board_size, self.board_size + self.info_size + self.player_info_size))
 
         # Draw a semi-transparent black rectangle on the image
         draw = ImageDraw.Draw(image)
