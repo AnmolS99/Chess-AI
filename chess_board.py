@@ -126,6 +126,12 @@ class ChessBoard:
     def is_checkmate(self):
         return self.is_in_check(self.board, self.turn) and len(self.get_all_legal_moves()) == 0
     
+    def is_stalemate(self):
+        return (not self.is_in_check(self.board, self.turn)) and len(self.get_all_legal_moves()) == 0
+    
+    def is_dead_position(self):
+        return np.count_nonzero(self.board == -6) == 1 and np.count_nonzero(self.board == 6) == 1 and np.count_nonzero(self.board != 0) == 2
+    
     def move_piece(self, move: Move):
         start_pos = move.start_pos
         end_pos = move.end_pos

@@ -85,6 +85,18 @@ class ChessGUI:
             self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Checkmate! {winner_player} wins!", font=("Arial", 26))
             self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
         
+        # Display stalemate info
+        if self.game.is_stalemate():
+            self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
+            self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Stalemate! Draw!", font=("Arial", 26))
+            self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+        
+        # Display dead position info
+        if self.game.is_dead_position():
+            self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
+            self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Dead position! Draw!", font=("Arial", 26))
+            self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+        
         # Display check info
         elif self.game.is_in_check(self.game.board, Player.black):
             self.canvas.create_text(300, self.game_info_size // 2, text="Black player in check!", font=("Arial", 18))

@@ -10,7 +10,7 @@ def main():
     fen_converter = FENConverter()
     game = ChessBoard()
     game.reset_board()
-    fen_converter.to_game_state(game, "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10")
+    fen_converter.to_game_state(game, "7k/8/8/5Q2/8/8/8/K7 w - - 0 1")
     
     ui = ChessGUI(game)
     
