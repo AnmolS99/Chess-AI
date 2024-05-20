@@ -4,7 +4,7 @@ A comprehensive chess implementation from scratch that includes all functionalit
 
 ## Motivation 💪
 
-Have played chess casually on and off for a couple of years, and wanted to learn chess programming. Also, since I am not very good at chess, I thought it would be interesting to see if I could create an AI that could play better than me (the bar is not high 😆).
+I have played chess casually on and off for a couple of years, and wanted to learn chess programming. Also, since I am not very good at chess, I thought it would be interesting to see if I could create an AI that could play better than me (the bar is not high 😆).
 
 ## Terminology
 
