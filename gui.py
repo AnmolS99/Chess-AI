@@ -56,9 +56,10 @@ class ChessGUI:
                 )
 
         # Display player info
-        player_color = self.game.turn.name
-        self.canvas.create_text(60, (self.player_info_size // 2) + self.game_info_size, text=f"Player: Black", font=("Arial", 18))
-        self.canvas.create_text(60, self.board_size + self.info_size + self.player_info_size // 2, text=f"Player: White", font=("Arial", 18))
+        player_turn = self.game.turn
+        player_points = self.game.get_points()
+        self.canvas.create_text(60, (self.player_info_size // 2) + self.game_info_size, text=f"Black ({player_points[Player.black]})", font=("Arial", 18), fill= "green" if player_turn == Player.black else "white")
+        self.canvas.create_text(60, self.board_size + self.info_size + self.player_info_size // 2, text=f"White ({player_points[Player.white]})", font=("Arial", 18), fill= "green" if player_turn == Player.white else "white")
 
         # Button to reset the game
         self.canvas.create_rectangle(self.board_size - 100, (self.player_info_size // 2) + self.game_info_size - 20, self.board_size, (self.player_info_size // 2) + self.game_info_size + 20, fill="green")

@@ -10,6 +10,7 @@ from pieces.queen import Queen
 from pieces.king import King
 
 piece_dict = {1: Pawn, 2: Rook, 3: Knight, 4: Bishop, 5: Queen, 6: King}
+piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 
 class ChessBoard:
 
@@ -207,6 +208,24 @@ class ChessBoard:
         else:
             possible_en_passant = None
         return board, king_position, possible_en_passant
+    
+    def get_points(self):
+        """
+        Returns a dictionary of both Players points, relative to each other. 
+        Example: If both players have captured equal material, except white has an extra rook,
+        white will have +5 points, while black will have -5.
+        """
+        white_points = 0
+        black_points = 0
+        for row in self.board:
+            for piece in row:
+                if abs(piece) > 5:
+                    pass
+                elif piece > 0:
+                    white_points += piece_value[abs(piece)]
+                elif piece < 0:
+                    black_points += piece_value[abs(piece)]
+        return {Player.white: white_points - black_points, Player.black: black_points - white_points}
     
     def copy(self):
         new_board = copy.deepcopy(ChessBoard())
