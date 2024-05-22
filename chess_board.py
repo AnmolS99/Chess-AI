@@ -1,5 +1,8 @@
 import copy
 import numpy as np
+from numba import int8, boolean
+from numba.experimental import jitclass
+from numba.typed import Dict, List
 from move import Move
 from player import Player
 from pieces.pawn import Pawn
@@ -12,6 +15,27 @@ from pieces.king import King
 piece_dict = {1: Pawn, 2: Rook, 3: Knight, 4: Bishop, 5: Queen, 6: King}
 piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 
+# Define the types for the keys and values of your dictionaries
+player_dict_type = Dict.empty(
+    key_type=Player,
+    value_type=int8[:]
+)
+
+castling_rights_dict_type = Dict.empty(
+    key_type=Player,
+    value_type=boolean[:]
+)
+
+spec = [
+    ('board', int8[:, :]),
+    ('turn', Player),
+    ('captured_pieces', player_dict_type),
+    ('king_position', player_dict_type),
+    ('possible_en_passant', tuple),
+    ('castling_rights', castling_rights_dict_type)
+]
+
+@jitclass(spec)
 class ChessBoard:
 
     def __init__(self):
@@ -20,7 +44,8 @@ class ChessBoard:
         self.captured_pieces = {Player.white: [], Player.black: []}
         self.king_position = {Player.white: (7, 4), Player.black: (0, 4)}
         self.possible_en_passant = None
-        self.castling_rights = {Player.white: {"king_side": True, "queen_side": True}, Player.black: {"king_side": True, "queen_side": True}}
+        # self.castling_rights = {Player.white: {"king_side": True, "queen_side": True}, Player.black: {"king_side": True, "queen_side": True}}
+        self.castling_rights = {Player.white: [True, True], Player.black: [True, True]}  # 0 index for king_side, 1 index for queen_side
     
     def reset_board(self):
         # Reset white pieces
@@ -162,15 +187,15 @@ class ChessBoard:
                     self.board[(end_pos[0], 5)] = rook_piece
                 
             # Remove all castling rights
-            self.castling_rights[self.turn]["king_side"] = False
-            self.castling_rights[self.turn]["queen_side"] = False
+            self.castling_rights[self.turn][0] = False
+            self.castling_rights[self.turn][1] = False
         
         # If rook moves, remove castling rights
         if abs(piece) == 2:
             if (self.turn == Player.white and start_pos == (7, 0)) or (self.turn == Player.black and start_pos == (0, 0)):
-                self.castling_rights[self.turn]["queen_side"] = False
+                self.castling_rights[self.turn][1] = False
             elif (self.turn == Player.white and start_pos == (7, 7)) or (self.turn == Player.black and start_pos == (0, 7)):
-                self.castling_rights[self.turn]["king_side"] = False
+                self.castling_rights[self.turn][0] = False
 
 
         # If pawn moves two squares, update possible en passant square

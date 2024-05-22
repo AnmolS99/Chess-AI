@@ -37,10 +37,10 @@ class FENConverter:
         board.turn = Player.white if fen_fields[1] == 'w' else Player.black
 
 
-        board.castling_rights[Player.white]["king_side"] = True if 'K' in fen_fields[2] else False
-        board.castling_rights[Player.white]["queen_side"] = True if 'Q' in fen_fields[2] else False
-        board.castling_rights[Player.black]["king_side"] = True if 'k' in fen_fields[2] else False
-        board.castling_rights[Player.black]["queen_side"] = True if 'q' in fen_fields[2] else False
+        board.castling_rights[Player.white][0] = True if 'K' in fen_fields[2] else False
+        board.castling_rights[Player.white][1] = True if 'Q' in fen_fields[2] else False
+        board.castling_rights[Player.black][0] = True if 'k' in fen_fields[2] else False
+        board.castling_rights[Player.black][1] = True if 'q' in fen_fields[2] else False
         
         if fen_fields[3] == '-':
             pass

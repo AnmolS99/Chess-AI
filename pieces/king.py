@@ -65,22 +65,22 @@ class King(Piece):
             if color_value == Player.white.value:
 
                 # Queen side
-                if castling_rights[Player.white]["queen_side"] and all(square == 0 for square in board[7][1:4]) and board[7][0] == 2 and not any(square in white_queen_side_squares for square in [move.end_pos for move in opp_capture_moves]):
+                if castling_rights[Player.white][1] and all(square == 0 for square in board[7][1:4]) and board[7][0] == 2 and not any(square in white_queen_side_squares for square in [move.end_pos for move in opp_capture_moves]):
                     moves.append(Move(pos, (7, 2), piece_value))
                 
                 # King side
-                if castling_rights[Player.white]["king_side"] and all(square == 0 for square in board[7][5:7]) and board[7][7] == 2 and not any(square in white_king_side_squares for square in [move.end_pos for move in opp_capture_moves]):
+                if castling_rights[Player.white][0] and all(square == 0 for square in board[7][5:7]) and board[7][7] == 2 and not any(square in white_king_side_squares for square in [move.end_pos for move in opp_capture_moves]):
                     moves.append(Move(pos, (7, 6), piece_value))
             
             # Castling (black)
             if color_value == Player.black.value:
 
                 # King side
-                if castling_rights[Player.black]["queen_side"] and all(square == 0 for square in board[0][1:4]) and board[0][0] == -2 and not any(square in black_queen_side_squares for square in [move.end_pos for move in opp_capture_moves]):
+                if castling_rights[Player.black][1] and all(square == 0 for square in board[0][1:4]) and board[0][0] == -2 and not any(square in black_queen_side_squares for square in [move.end_pos for move in opp_capture_moves]):
                     moves.append(Move(pos, (0, 2), piece_value))
                 
                 # Queen side
-                if castling_rights[Player.black]["king_side"] and all(square == 0 for square in board[0][5:7]) and board[0][7] == -2 and not any(square in black_king_side_squares for square in [move.end_pos for move in opp_capture_moves]):
+                if castling_rights[Player.black][0] and all(square == 0 for square in board[0][5:7]) and board[0][7] == -2 and not any(square in black_king_side_squares for square in [move.end_pos for move in opp_capture_moves]):
                     moves.append(Move(pos, (0, 6), piece_value))
 
         return moves
