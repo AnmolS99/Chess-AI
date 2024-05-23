@@ -1,8 +1,9 @@
 import copy
 import numpy as np
-from numba import int8, boolean
+import numba as nb
+from numba import int16, boolean
 from numba.experimental import jitclass
-from numba.typed import Dict, List
+from numba.typed import Dict
 from move import Move
 from player import Player
 from pieces.pawn import Pawn
@@ -16,9 +17,14 @@ piece_dict = {1: Pawn, 2: Rook, 3: Knight, 4: Bishop, 5: Queen, 6: King}
 piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 
 # Define the types for the keys and values of your dictionaries
-player_dict_type = Dict.empty(
+captured_pieces_dict_type = Dict.empty(
     key_type=Player,
-    value_type=int8[:]
+    value_type=int16[:]
+)
+
+king_position_dict_type = Dict.empty(
+    key_type=Player,
+    value_type=nb.typeof((0, 0))
 )
 
 castling_rights_dict_type = Dict.empty(
@@ -27,11 +33,11 @@ castling_rights_dict_type = Dict.empty(
 )
 
 spec = [
-    ('board', int8[:, :]),
+    ('board', int16[:, :]),
     ('turn', Player),
-    ('captured_pieces', player_dict_type),
-    ('king_position', player_dict_type),
-    ('possible_en_passant', tuple),
+    ('captured_pieces', captured_pieces_dict_type),
+    ('king_position', king_position_dict_type),
+    ('possible_en_passant', nb.typeof((0, 0))),
     ('castling_rights', castling_rights_dict_type)
 ]
 
