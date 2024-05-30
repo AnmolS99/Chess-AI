@@ -15,7 +15,7 @@ piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 class ChessBoard:
 
     def __init__(self):
-        self.board = np.zeros((8, 8))   # np array is computationally more efficient than FEN notation and easier to program, however FEN is more memory efficient
+        self.board = np.zeros((8, 8), np.int8)
         self.turn = Player.white
         self.captured_pieces = {Player.white: [], Player.black: []}
         self.king_position = {Player.white: (7, 4), Player.black: (0, 4)}
@@ -24,15 +24,15 @@ class ChessBoard:
     
     def reset_board(self):
         # Reset white pieces
-        self.board[6][:] = np.ones(8)
-        self.board[7][:] = np.array([2, 3, 4, 5, 6, 4, 3, 2])
+        self.board[6][:] = np.ones(8, np.int8)
+        self.board[7][:] = np.array([2, 3, 4, 5, 6, 4, 3, 2], np.int8)
 
         # This one-liner sets rows 2 to 5 to 0
         self.board[2:6][:] = 0
         
         # Reset black pieces
-        self.board[1][:] = -np.ones(8) 
-        self.board[0][:] = -np.array([2, 3, 4, 5, 6, 4, 3, 2])
+        self.board[1][:] = -np.ones(8, np.int8)
+        self.board[0][:] = -np.array([2, 3, 4, 5, 6, 4, 3, 2], np.int8)
 
         self.turn = Player.white
         self.captured_pieces = {Player.white: [], Player.black: []}
@@ -53,10 +53,9 @@ class ChessBoard:
     """Returns all legals moves for a player"""
     def get_all_legal_moves(self):
         all_legal_moves = []
-        for row in range(8):
-            for col in range(8):    # Maybe change these two for-loops to one that only look at the positions of the current players pieces
-                if self.board[row][col] * self.turn.value > 0:
-                    all_legal_moves.extend(self.get_legal_moves((row, col)))
+        piece_positions = np.argwhere(self.board * self.turn.value > 0)
+        for position in piece_positions:
+            all_legal_moves.extend(self.get_legal_moves(tuple(position)))
         return all_legal_moves
     
     """Returns all possible moves for a selected piece (in a position). NOTE that this function does not check if the move puts the king in check."""
