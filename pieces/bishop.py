@@ -16,43 +16,34 @@ class Bishop(Piece):
         moves = []
         x, y = pos
         # Diagonally down-right
-        for i in range(1, 8 - max(x, y)):
-            if board[x + i][y + i] == 0:
-                moves.append(Move(pos, (x + i, y + i), piece_value))
-            elif board[x + i][y + i] * color_value < 0:
-                moves.append(Move(pos, (x + i, y + i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, 1, 1, x, y)
         # Diagonally down-left
-        for i in range(1, 8 - max(x, 7 - y)):
-            if board[x + i][y - i] == 0:
-                moves.append(Move(pos, (x + i, y - i), piece_value))
-            elif board[x + i][y - i] * color_value < 0:
-                moves.append(Move(pos, (x + i, y - i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, 1, -1, x, 7 - y)
         # Diagonally up-right
-        for i in range(1, 8 - max(7 - x, y)):
-            if board[x - i][y + i] == 0:
-                moves.append(Move(pos, (x - i, y + i), piece_value))
-            elif board[x - i][y + i] * color_value < 0:
-                moves.append(Move(pos, (x - i, y + i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, -1, 1, 7 - x, y)
         # Diagonally up-left
-        for i in range(1, 8 - max(7 - x, 7 - y)):
-            if board[x - i][y - i] == 0:
-                moves.append(Move(pos, (x - i, y - i), piece_value))
-            elif board[x - i][y - i] * color_value < 0:
-                moves.append(Move(pos, (x - i, y - i), piece_value))
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, -1, -1, 7 - x, 7 - y)
+        return moves
+    
+    @staticmethod
+    def diagonal_moves(board, moves, pos, piece_value, color_value, x_diag_direction, y_diag_direction, x_direction_dist, y_direction_dist):
+        """
+        x_direction_dist: The x (row) distance gone in the diagonal directon (this will be different if you go diagonally up or down)
+        y_direction_dist: The y (col) distance gone in the diagonal directon (this will be different if you go diagonally left or right)
+        """
+        i = 1
+        x, y = pos
+        while i < 8 - max(x_direction_dist, y_direction_dist):
+            diag_pos = (x + (i * x_diag_direction), y + (i * y_diag_direction))
+            diag_pos_val = board[diag_pos]
+            if diag_pos_val == 0:
+                moves.append(Move(pos, diag_pos, piece_value))
+            elif diag_pos_val * color_value < 0:
+                moves.append(Move(pos, diag_pos, piece_value))
                 break
             else:
                 break
-        
-        return moves
+            i += 1
     
     @staticmethod
     def get_capture_moves(board, pos, possible_en_passant, color_value):

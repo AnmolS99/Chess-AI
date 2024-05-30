@@ -16,44 +16,44 @@ class King(Piece):
         x, y = pos
         if x > 0:
             # Up
-            if board[x - 1][y] == 0 or board[x - 1][y] * color_value < 0:
+            if board[x - 1][y] * color_value <= 0:
                 moves.append(Move(pos, (x - 1, y), piece_value))
             
             # Up-left
             if y > 0:
-                if board[x - 1][y - 1] == 0 or board[x - 1][y - 1] * color_value < 0:
+                if board[x - 1][y - 1] * color_value <= 0:
                     moves.append(Move(pos, (x - 1, y - 1), piece_value))
             
             # Up-right
             if y < 7:
-                if board[x - 1][y + 1] == 0 or board[x - 1][y + 1] * color_value < 0:
+                if board[x - 1][y + 1] * color_value <= 0:
                     moves.append(Move(pos, (x - 1, y + 1), piece_value))
         
         if y > 0:
 
             # Left
-            if board[x][y - 1] == 0 or board[x][y - 1] * color_value < 0:
+            if board[x][y - 1] * color_value <= 0:
                     moves.append(Move(pos, (x, y - 1), piece_value))
         
         if y < 7:
 
             # Right
-            if board[x][y + 1] == 0 or board[x][y + 1] * color_value < 0:
+            if board[x][y + 1] * color_value <= 0:
                     moves.append(Move(pos, (x, y + 1), piece_value))
 
         if x < 7:
             # Down
-            if board[x + 1][y] == 0 or board[x + 1][y] * color_value < 0:
+            if board[x + 1][y] * color_value <= 0:
                 moves.append(Move(pos, (x + 1, y), piece_value))
             
             # Down-left
             if y > 0:
-                if board[x + 1][y - 1] == 0 or board[x + 1][y - 1] * color_value < 0:
+                if board[x + 1][y - 1] * color_value <= 0:
                     moves.append(Move(pos, (x + 1, y - 1), piece_value))
             
             # Down-right
             if y < 7:
-                if board[x + 1][y + 1] == 0 or board[x + 1][y + 1] * color_value < 0:
+                if board[x + 1][y + 1] * color_value <= 0:
                     moves.append(Move(pos, (x + 1, y + 1), piece_value))
         
         if opp_capture_moves is not None and (x, y) not in [opp_capture_move.end_pos for opp_capture_move in opp_capture_moves]:    # King cannot castle while in check 

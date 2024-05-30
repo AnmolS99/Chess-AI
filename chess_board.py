@@ -9,6 +9,7 @@ from pieces.bishop import Bishop
 from pieces.queen import Queen
 from pieces.king import King
 
+board_positions = [(row, col) for row in range(8) for col in range(8)]
 piece_dict = {1: Pawn, 2: Rook, 3: Knight, 4: Bishop, 5: Queen, 6: King}
 piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 
@@ -53,9 +54,9 @@ class ChessBoard:
     """Returns all legals moves for a player"""
     def get_all_legal_moves(self):
         all_legal_moves = []
-        piece_positions = np.argwhere(self.board * self.turn.value > 0)
-        for position in piece_positions:
-            all_legal_moves.extend(self.get_legal_moves(tuple(position)))
+        for pos in board_positions:
+            if self.board[pos] * self.turn.value > 0:
+                all_legal_moves.extend(self.get_legal_moves(pos))
         return all_legal_moves
     
     """Returns all possible moves for a selected piece (in a position). NOTE that this function does not check if the move puts the king in check."""
@@ -95,19 +96,17 @@ class ChessBoard:
     """Returns all possible moves for a player. NOTE that this function does not check if the move puts the king in check."""
     def get_all_possible_moves(self, board, color_value, possible_en_passant):
         all_possible_moves = []
-        for row in range(8):
-            for col in range(8):
-                if board[row][col] * color_value > 0:
-                    all_possible_moves.extend(self.get_possible_moves((row, col), board, color_value, possible_en_passant, ignore_turn=True))
+        for pos in board_positions:
+            if board[pos] * color_value > 0:
+                all_possible_moves.extend(self.get_possible_moves(pos, board, color_value, possible_en_passant, ignore_turn=True))
         return all_possible_moves
     
     """Returns all possible capture moves for a player. NOTE that this function does not check if the move puts the king in check."""
     def get_all_possible_capture_moves(self, board, color_value, possible_en_passant):
         all_possible_capture_moves = []
-        for row in range(8):
-            for col in range(8): # Maybe change these two for-loops to one that only look at the positions of the current players pieces
-                if board[row][col] * color_value > 0:
-                    all_possible_capture_moves.extend(self.get_possible_capture_moves((row, col), board, color_value, possible_en_passant, ignore_turn=True))
+        for pos in board_positions:
+            if board[pos] * color_value > 0:
+                    all_possible_capture_moves.extend(self.get_possible_capture_moves(pos, board, color_value, possible_en_passant, ignore_turn=True))
         return all_possible_capture_moves
     
     def is_in_check(self, board, turn, king_position=None, possible_en_passant=None):
