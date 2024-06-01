@@ -1,4 +1,5 @@
 from move import Move
+from pieces.bishop import Bishop
 from pieces.piece import Piece
 
 piece_int = 5
@@ -48,41 +49,13 @@ class Queen(Piece):
                 break
         
         # Diagonally down-right
-        for i in range(1, 8 - max(x, y)):
-            if board[x + i][y + i] == 0:
-                moves.append(Move(pos, (x + i, y + i), piece_value))
-            elif board[x + i][y + i] * color_value < 0:
-                moves.append(Move(pos, (x + i, y + i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, 1, 1, x, y)
         # Diagonally down-left
-        for i in range(1, 8 - max(x, 7 - y)):
-            if board[x + i][y - i] == 0:
-                moves.append(Move(pos, (x + i, y - i), piece_value))
-            elif board[x + i][y - i] * color_value < 0:
-                moves.append(Move(pos, (x + i, y - i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, 1, -1, x, 7 - y)
         # Diagonally up-right
-        for i in range(1, 8 - max(7 - x, y)):
-            if board[x - i][y + i] == 0:
-                moves.append(Move(pos, (x - i, y + i), piece_value))
-            elif board[x - i][y + i] * color_value < 0:
-                moves.append(Move(pos, (x - i, y + i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, -1, 1, 7 - x, y)
         # Diagonally up-left
-        for i in range(1, 8 - max(7 - x, 7 - y)):
-            if board[x - i][y - i] == 0:
-                moves.append(Move(pos, (x - i, y - i), piece_value))
-            elif board[x - i][y - i] * color_value < 0:
-                moves.append(Move(pos, (x - i, y - i), piece_value))
-                break
-            else:
-                break
+        Bishop.diagonal_moves(board, moves, pos, piece_value, color_value, -1, -1, 7 - x, 7 - y)
 
         return moves
     
