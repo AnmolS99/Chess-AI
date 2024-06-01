@@ -37,5 +37,5 @@ class Knight(Piece):
         return moves
     
     @staticmethod
-    def get_capture_moves(board, pos, possible_en_passant, color_value):
-        return Knight.get_moves(board, pos, possible_en_passant, None, None, color_value)
+    def get_capture_moves(board, pos, color_value):
+        return Knight.get_moves(board, pos, None, None, None, color_value)

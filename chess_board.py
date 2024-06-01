@@ -15,25 +15,18 @@ piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 
 class ChessBoard:
 
-    def __init__(self):
-        self.board = np.zeros((8, 8), np.int8)
-        self.turn = Player.white
-        self.captured_pieces = {Player.white: [], Player.black: []}
-        self.king_position = {Player.white: (7, 4), Player.black: (0, 4)}
-        self.possible_en_passant = None
-        self.castling_rights = {Player.white: {"king_side": True, "queen_side": True}, Player.black: {"king_side": True, "queen_side": True}}
     
     def reset_board(self):
-        # Reset white pieces
-        self.board[6][:] = np.ones(8, np.int8)
-        self.board[7][:] = np.array([2, 3, 4, 5, 6, 4, 3, 2], np.int8)
-
-        # This one-liner sets rows 2 to 5 to 0
-        self.board[2:6][:] = 0
-        
-        # Reset black pieces
-        self.board[1][:] = -np.ones(8, np.int8)
-        self.board[0][:] = -np.array([2, 3, 4, 5, 6, 4, 3, 2], np.int8)
+        self.board = np.array([
+            [-2, -3, -4, -5, -6, -4, -3, -2],
+            [-1, -1, -1, -1, -1, -1, -1, -1],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [2, 3, 4, 5, 6, 4, 3, 2]
+            ])
 
         self.turn = Player.white
         self.captured_pieces = {Player.white: [], Player.black: []}
@@ -46,8 +39,8 @@ class ChessBoard:
         legal_moves = []
         if self.board[selected_pos] * self.turn.value > 0:
             for move in self.get_possible_moves(selected_pos):
-                hypotetical_board, hypotetical_king_position, hypotetical_en_passant = self.hypotetical_move_piece(self.board.copy(), self.king_position.copy(), move, self.turn)
-                if not self.is_in_check(hypotetical_board, self.turn, hypotetical_king_position, hypotetical_en_passant):
+                hyp_board, hyp_king_position = self.hyp_move_piece(self.board.copy(), self.king_position.copy(), move, self.turn)
+                if not self.is_in_check(hyp_board, self.turn, hyp_king_position):
                     legal_moves.append(move)
         return legal_moves
     
@@ -75,23 +68,21 @@ class ChessBoard:
         elif not ignore_turn and color_value * selected_piece < 0:
             return []
         else:
-            return piece_dict[abs(selected_piece)].get_moves(board, selected_pos, possible_en_passant, castling_rights, self.get_all_possible_capture_moves(self.board, -self.turn.value, self.possible_en_passant), color_value)
+            return piece_dict[abs(selected_piece)].get_moves(board, selected_pos, possible_en_passant, castling_rights, self.get_all_possible_capture_moves(self.board, -self.turn.value), color_value)
     
     """Returns all possible capture moves for a selected piece (in a position). NOTE that this function does not check if the move puts the king in check."""
-    def get_possible_capture_moves(self, selected_pos, board=None, color_value=None, possible_en_passant=None, ignore_turn=False):
+    def get_possible_capture_moves(self, selected_pos, board=None, color_value=None, ignore_turn=False):
         if color_value is None:
             color_value = self.turn.value
         if board is None:
             board = self.board
-        if possible_en_passant is None:
-            possible_en_passant = self.possible_en_passant
         selected_piece = board[selected_pos]
         if selected_piece == 0:
             return []
         elif not ignore_turn and color_value * selected_piece < 0:
             return []
         else:
-            return piece_dict[abs(selected_piece)].get_capture_moves(board, selected_pos, possible_en_passant, color_value)
+            return piece_dict[abs(selected_piece)].get_capture_moves(board, selected_pos, color_value)
     
     """Returns all possible moves for a player. NOTE that this function does not check if the move puts the king in check."""
     def get_all_possible_moves(self, board, color_value, possible_en_passant):
@@ -102,24 +93,20 @@ class ChessBoard:
         return all_possible_moves
     
     """Returns all possible capture moves for a player. NOTE that this function does not check if the move puts the king in check."""
-    def get_all_possible_capture_moves(self, board, color_value, possible_en_passant):
+    def get_all_possible_capture_moves(self, board, color_value):
         all_possible_capture_moves = []
         for pos in board_positions:
             if board[pos] * color_value > 0:
-                    all_possible_capture_moves.extend(self.get_possible_capture_moves(pos, board, color_value, possible_en_passant, ignore_turn=True))
+                    all_possible_capture_moves.extend(self.get_possible_capture_moves(pos, board, color_value, ignore_turn=True))
         return all_possible_capture_moves
     
-    def is_in_check(self, board, turn, king_position=None, possible_en_passant=None):
+    def is_in_check(self, board, turn, king_position=None):
         if king_position is None:
             king_pos = self.king_position[turn]
         else:
             king_pos = king_position[turn]
-        if possible_en_passant is None:
-            en_passant = self.possible_en_passant
-        else:
-            en_passant = possible_en_passant
         if king_pos is not None:
-            return king_pos in [move.end_pos for move in self.get_all_possible_capture_moves(board, -turn.value, en_passant)]
+            return king_pos in [move.end_pos for move in self.get_all_possible_capture_moves(board, -turn.value)]
         return False
     
     def is_checkmate(self):
@@ -178,7 +165,7 @@ class ChessBoard:
             self.possible_en_passant = None
         self.turn = Player.white if self.turn == Player.black else Player.black
     
-    def hypotetical_move_piece(self, board, king_position, move: Move, turn):
+    def hyp_move_piece(self, board, king_position, move: Move, turn):
         start_pos = move.start_pos
         end_pos = move.end_pos
         piece = move.end_piece
@@ -188,7 +175,7 @@ class ChessBoard:
         board[end_pos] = piece
         if abs(piece) == 6:
             king_position[turn] = end_pos
-            # If king moves to places, it is castling
+            # If king moves two places, it is castling
             if abs(start_pos[1] - end_pos[1]) == 2:
                 if (abs(end_pos[1]) == 2):
                     # Move queen side rook
@@ -201,11 +188,7 @@ class ChessBoard:
                     board[(end_pos[0], 7)] = 0
                     board[(end_pos[0], 5)] = rook_piece
                 
-        if abs(piece) == 1 and abs(start_pos[0] - end_pos[0]) == 2:
-            possible_en_passant = end_pos
-        else:
-            possible_en_passant = None
-        return board, king_position, possible_en_passant
+        return board, king_position
     
     def get_points(self):
         """
@@ -226,11 +209,11 @@ class ChessBoard:
         return {Player.white: white_points - black_points, Player.black: black_points - white_points}
     
     def copy(self):
-        new_board = copy.deepcopy(ChessBoard())
+        new_board = ChessBoard()
         new_board.board = copy.deepcopy(self.board)
-        new_board.turn = copy.deepcopy(self.turn)
+        new_board.turn = self.turn
         new_board.captured_pieces = copy.deepcopy(self.captured_pieces)
         new_board.king_position = copy.deepcopy(self.king_position)
-        new_board.possible_en_passant = copy.deepcopy(self.possible_en_passant)
+        new_board.possible_en_passant = self.possible_en_passant
         new_board.castling_rights = copy.deepcopy(self.castling_rights)
         return new_board

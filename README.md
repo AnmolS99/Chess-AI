@@ -60,6 +60,8 @@ To calculate the number of nodes at a depth of 5, it takes 7.5 minutes!
 
 The most obvious way to speed up my chess program would be to change to a compiled language such as C or C#. This comes at the cost of development time. A reasonable solution would therefore be to use a JIT-compiler for my already developed code.
 
+Running the perft tests was a good way to measure the speed of my code. Before optimization it took my code ~26 seconds to run the tests.
+
 ## Cool Resources
 
 Some cool resources I found while developing:

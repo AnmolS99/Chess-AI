@@ -59,7 +59,7 @@ class Pawn(Piece):
         return moves
     
     @staticmethod
-    def get_capture_moves(board, pos, possible_en_passant, color_value):
+    def get_capture_moves(board, pos, color_value):
         piece_value = piece_int * color_value
         capture_moves = []
         x, y = pos
