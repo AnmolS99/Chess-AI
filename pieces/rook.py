@@ -15,36 +15,36 @@ class Rook(Piece):
         # Down
         for i in range (x + 1, 8):
             if board[i][y] == 0:
-                moves.append((pos, (i, y), piece_value, False))
+                moves.append((pos, (i, y), piece_value))
             elif board[i][y] * color_value < 0:
-                moves.append((pos, (i, y), piece_value, False))
+                moves.append((pos, (i, y), piece_value))
                 break
             else:
                 break
         # Up
         for i in range (x - 1, -1, -1):
             if board[i][y] == 0:
-                moves.append((pos, (i, y), piece_value, False))
+                moves.append((pos, (i, y), piece_value))
             elif board[i][y] * color_value < 0:
-                moves.append((pos, (i, y), piece_value, False))
+                moves.append((pos, (i, y), piece_value))
                 break
             else:
                 break
         # Right
         for i in range (y + 1, 8):
             if board[x][i] == 0:
-                moves.append((pos, (x, i), piece_value, False))
+                moves.append((pos, (x, i), piece_value))
             elif board[x][i] * color_value < 0:
-                moves.append((pos, (x, i), piece_value, False))
+                moves.append((pos, (x, i), piece_value))
                 break
             else:
                 break
         # Left
         for i in range (y - 1, -1, -1):
             if board[x][i] == 0:
-                moves.append((pos, (x, i), piece_value, False))
+                moves.append((pos, (x, i), piece_value))
             elif board[x][i] * color_value < 0:
-                moves.append((pos, (x, i), piece_value, False))
+                moves.append((pos, (x, i), piece_value))
                 break
             else:
                 break

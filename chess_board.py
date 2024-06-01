@@ -105,7 +105,7 @@ class ChessBoard:
         else:
             king_pos = king_position[turn]
         if king_pos is not None:
-            return king_pos in [end_pos for (start_pos, end_pos, piece, _) in self.get_all_possible_capture_moves(board, -turn.value)]
+            return king_pos in [end_pos for (start_pos, end_pos, piece) in self.get_all_possible_capture_moves(board, -turn.value)]
         return False
     
     def is_checkmate(self):
@@ -118,7 +118,7 @@ class ChessBoard:
         return np.count_nonzero(self.board == -6) == 1 and np.count_nonzero(self.board == 6) == 1 and np.count_nonzero(self.board != 0) == 2
     
     def move_piece(self, move):
-        start_pos, end_pos, piece, _ = move
+        start_pos, end_pos, piece = move
         self.board[start_pos] = 0
         if self.board[end_pos] != 0:
             self.captured_pieces[self.turn].append(self.board[end_pos])
@@ -163,7 +163,7 @@ class ChessBoard:
         self.turn = Player.white if self.turn == Player.black else Player.black
     
     def hyp_move_piece(self, board, king_position, move, turn):
-        start_pos, end_pos, piece, _ = move
+        start_pos, end_pos, piece = move
         board[start_pos] = 0
         if abs(piece) == 1 and board[end_pos] == 0 and start_pos[1] != end_pos[1]:
             board[(start_pos[0], end_pos[1])] = 0
