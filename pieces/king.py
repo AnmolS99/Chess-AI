@@ -1,4 +1,3 @@
-from move import Move
 from pieces.piece import Piece
 from player import Player
 
@@ -17,46 +16,46 @@ class King(Piece):
         if x > 0:
             # Up
             if board[x - 1][y] * color_value <= 0:
-                moves.append(Move(pos, (x - 1, y), piece_value))
+                moves.append((pos, (x - 1, y), piece_value, False))
             
             # Up-left
             if y > 0:
                 if board[x - 1][y - 1] * color_value <= 0:
-                    moves.append(Move(pos, (x - 1, y - 1), piece_value))
+                    moves.append((pos, (x - 1, y - 1), piece_value, False))
             
             # Up-right
             if y < 7:
                 if board[x - 1][y + 1] * color_value <= 0:
-                    moves.append(Move(pos, (x - 1, y + 1), piece_value))
+                    moves.append((pos, (x - 1, y + 1), piece_value, False))
         
         if y > 0:
 
             # Left
             if board[x][y - 1] * color_value <= 0:
-                    moves.append(Move(pos, (x, y - 1), piece_value))
+                    moves.append((pos, (x, y - 1), piece_value, False))
         
         if y < 7:
 
             # Right
             if board[x][y + 1] * color_value <= 0:
-                    moves.append(Move(pos, (x, y + 1), piece_value))
+                    moves.append((pos, (x, y + 1), piece_value, False))
 
         if x < 7:
             # Down
             if board[x + 1][y] * color_value <= 0:
-                moves.append(Move(pos, (x + 1, y), piece_value))
+                moves.append((pos, (x + 1, y), piece_value, False))
             
             # Down-left
             if y > 0:
                 if board[x + 1][y - 1] * color_value <= 0:
-                    moves.append(Move(pos, (x + 1, y - 1), piece_value))
+                    moves.append((pos, (x + 1, y - 1), piece_value, False))
             
             # Down-right
             if y < 7:
                 if board[x + 1][y + 1] * color_value <= 0:
-                    moves.append(Move(pos, (x + 1, y + 1), piece_value))
+                    moves.append((pos, (x + 1, y + 1), piece_value, False))
         
-        if opp_capture_moves is not None and (x, y) not in [opp_capture_move.end_pos for opp_capture_move in opp_capture_moves]:    # King cannot castle while in check 
+        if opp_capture_moves is not None and (x, y) not in [end_pos for (_, end_pos, _, _) in opp_capture_moves]:    # King cannot castle while in check 
             white_king_side_squares = [(7, 5), (7, 6)]
             white_queen_side_squares = [(7, 2), (7, 3), (7, 4)]
             black_king_side_squares = [(0, 5), (0, 6)]
@@ -65,23 +64,23 @@ class King(Piece):
             if color_value == Player.white.value:
 
                 # Queen side
-                if castling_rights[Player.white]["queen_side"] and all(square == 0 for square in board[7][1:4]) and board[7][0] == 2 and not any(square in white_queen_side_squares for square in [move.end_pos for move in opp_capture_moves]):
-                    moves.append(Move(pos, (7, 2), piece_value))
+                if castling_rights[Player.white]["queen_side"] and all(square == 0 for square in board[7][1:4]) and board[7][0] == 2 and not any(square in white_queen_side_squares for square in [end_pos for (_, end_pos, _, _) in opp_capture_moves]):
+                    moves.append((pos, (7, 2), piece_value, False))
                 
                 # King side
-                if castling_rights[Player.white]["king_side"] and all(square == 0 for square in board[7][5:7]) and board[7][7] == 2 and not any(square in white_king_side_squares for square in [move.end_pos for move in opp_capture_moves]):
-                    moves.append(Move(pos, (7, 6), piece_value))
+                if castling_rights[Player.white]["king_side"] and all(square == 0 for square in board[7][5:7]) and board[7][7] == 2 and not any(square in white_king_side_squares for square in [end_pos for (_, end_pos, _, _) in opp_capture_moves]):
+                    moves.append((pos, (7, 6), piece_value, False))
             
             # Castling (black)
             if color_value == Player.black.value:
 
                 # King side
-                if castling_rights[Player.black]["queen_side"] and all(square == 0 for square in board[0][1:4]) and board[0][0] == -2 and not any(square in black_queen_side_squares for square in [move.end_pos for move in opp_capture_moves]):
-                    moves.append(Move(pos, (0, 2), piece_value))
+                if castling_rights[Player.black]["queen_side"] and all(square == 0 for square in board[0][1:4]) and board[0][0] == -2 and not any(square in black_queen_side_squares for square in [end_pos for (_, end_pos, _, _) in opp_capture_moves]):
+                    moves.append((pos, (0, 2), piece_value, False))
                 
                 # Queen side
-                if castling_rights[Player.black]["king_side"] and all(square == 0 for square in board[0][5:7]) and board[0][7] == -2 and not any(square in black_king_side_squares for square in [move.end_pos for move in opp_capture_moves]):
-                    moves.append(Move(pos, (0, 6), piece_value))
+                if castling_rights[Player.black]["king_side"] and all(square == 0 for square in board[0][5:7]) and board[0][7] == -2 and not any(square in black_king_side_squares for square in [end_pos for (_, end_pos, _, _) in opp_capture_moves]):
+                    moves.append((pos, (0, 6), piece_value, False))
 
         return moves
     

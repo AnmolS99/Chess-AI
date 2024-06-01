@@ -1,4 +1,3 @@
-from move import Move
 from pieces.piece import Piece
 
 
@@ -37,9 +36,9 @@ class Bishop(Piece):
             diag_pos = (x + (i * x_diag_direction), y + (i * y_diag_direction))
             diag_pos_val = board[diag_pos]
             if diag_pos_val == 0:
-                moves.append(Move(pos, diag_pos, piece_value))
+                moves.append((pos, diag_pos, piece_value, False))
             elif diag_pos_val * color_value < 0:
-                moves.append(Move(pos, diag_pos, piece_value))
+                moves.append((pos, diag_pos, piece_value, False))
                 break
             else:
                 break
