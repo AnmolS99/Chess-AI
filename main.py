@@ -10,7 +10,7 @@ def main():
     """
     Main function for running this python script.
     """
-    game = ChessGame(white_player_type="Random", black_player_type="User")
+    game = ChessGame(white_player_type="User", black_player_type="User")
     game.play()
 
 if __name__ == '__main__':

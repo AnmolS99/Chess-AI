@@ -17,92 +17,35 @@ class ChessGame():
         self.black_player_type = black_player_type
 
     def play(self):
-        # User vs. User
-        if (self.white_player_type == PlayerType.User.name and self.black_player_type == PlayerType.User.name):
-            self.ui.print_game()
-            self.ui.root.mainloop()
-        
-        # User vs. RandomBot
-        elif (self.white_player_type == PlayerType.User.name and self.black_player_type == PlayerType.Random.name):
 
-            black_player = RandomBot(self.chess_board, self.ui, Player.black)
-            self.ui.print_game()
-            self.ui.root.update()
+        white_player = self.get_player(self.white_player_type, Player.white)
+        black_player = self.get_player(self.black_player_type, Player.black)
+        self.ui.print_game()
+        self.ui.root.update()
 
-            finished = False
+        finished = False
 
-            while True:
-                if self.chess_board.turn == Player.black and not finished:
-                    black_player.make_move()
-                    self.ui.print_game()
-                    self.ui.root.update()
-                else:
-                    self.ui.root.wait_variable(self.ui.clicked)
-                    self.ui.clicked.set(False)
-                    self.ui.root.update()
-                
+        while True:
+            if self.chess_board.turn == Player.white and not finished:
+                white_player.make_move()
+                self.ui.print_game()
+                self.ui.root.update()
+            else:
+                black_player.make_move()
+                self.ui.print_game()
+                self.ui.root.update()
+            
 
-                finished, white_points, black_points = self.chess_board.is_finished()
-                if finished:
-                    self.ui.print_game()
-                    self.ui.root.update()
-        
-        # RandomBot vs. User
-        elif (self.white_player_type == PlayerType.Random.name and self.black_player_type == PlayerType.User.name):
-
-            white_player = RandomBot(self.chess_board, self.ui, Player.white)
-            self.ui.print_game()
-            self.ui.root.update()
-
-            finished = False
-
-            while True:
-                if self.chess_board.turn == Player.white and not finished:
-                    white_player.make_move()
-                    self.ui.print_game()
-                    self.ui.root.update()
-                else:
-                    self.ui.root.wait_variable(self.ui.clicked)
-                    self.ui.clicked.set(False)
-                    self.ui.root.update()
-                
-
-                finished, white_points, black_points = self.chess_board.is_finished()
-                if finished:
-                    self.ui.print_game()
-                    self.ui.root.update()
-        
-        # RandomBot vs. RandomBot
-        elif (self.white_player_type == PlayerType.Random.name and self.black_player_type == PlayerType.Random.name):
-
-            white_player = RandomBot(self.chess_board, self.ui, Player.white)
-            black_player = RandomBot(self.chess_board, self.ui, Player.black)
-            self.ui.print_game()
-            self.ui.root.update()
-
-            finished = False
-
-            while True:
-                if self.chess_board.turn == Player.white and not finished:
-                    white_player.make_move()
-                    self.ui.print_game()
-                    self.ui.root.update()
-                else:
-                    black_player.make_move()
-                    self.ui.print_game()
-                    self.ui.root.update()
-                
-
-                finished, white_points, black_points = self.chess_board.is_finished()
-                if finished:
-                    self.ui.print_game()
-                    self.ui.root.update()
-                    self.ui.root.wait_variable(self.ui.clicked)
-                    self.ui.clicked.set(False)
-                    self.ui.root.update()
+            finished, white_points, black_points = self.chess_board.is_finished()
+            if finished:
+                self.ui.print_game()
+                self.ui.root.update()
+                self.ui.root.wait_variable(self.ui.clicked)
+                self.ui.clicked.set(False)
+                self.ui.root.update()
 
     def get_player(self, player_type, player):
         if player_type == PlayerType.Random.name:
             return RandomBot(self.chess_board, self.ui, player)
         else:
-            return User
+            return User(self.chess_board, self.ui, player)

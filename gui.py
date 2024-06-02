@@ -146,7 +146,6 @@ class ChessGUI:
         elif event.y < self.info_size:
             # If clicked on the reset button
             if self.board_size - 100 < event.x < self.board_size and (self.player_info_size // 2) + self.game_info_size - 20 < event.y < (self.player_info_size // 2) + self.game_info_size + 20:
-                print("Game reset")
                 self.game.reset_board()
             self.selected_pos = None
             self.print_game()
@@ -154,7 +153,6 @@ class ChessGUI:
             return
         col = event.x // self.square_size
         row = (event.y - self.info_size) // self.square_size # Account for the space above the board
-        print(f"Clicked on {row}, {col}")
         if self.selected_pos is not None:
             piece = self.game.board[self.selected_pos]
             # If attempting promotion
@@ -165,7 +163,7 @@ class ChessGUI:
                     self.show_promotion = True
                     self.promotion_to_square = (row, col)
             else:
-                move = (self.selected_pos, (row, col), piece)   # TODO: Update this to be whatever piece chosen by user in case of pawn promotion
+                move = (self.selected_pos, (row, col), piece)
                 if move in self.game.get_legal_moves(self.selected_pos):
                     self.game.move_piece(move)
                 self.selected_pos = None

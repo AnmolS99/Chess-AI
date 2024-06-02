@@ -32,7 +32,7 @@ class ChessBoard:
         self.king_position = {Player.white: (7, 4), Player.black: (0, 4)}
         self.possible_en_passant = None
         self.castling_rights = {Player.white: {"king_side": True, "queen_side": True}, Player.black: {"king_side": True, "queen_side": True}}
-        self.num_moves = 0
+        self.num_moves = 1
 
     """Returns all legals moves for a selected piece (in a position)"""
     def get_legal_moves(self, selected_pos):
