@@ -4,15 +4,7 @@ A comprehensive chess implementation from scratch that includes all functionalit
 
 ## Motivation 💪
 
-I have played chess casually on and off for a couple of years, and wanted to learn chess programming. Also, since I am not very good at chess, I thought it would be interesting to see if I could create an AI that could play better than me (the bar is not high 😆).
-
-## Terminology
-
-### Moves
-
-There is a difference between possible moves: Attacked squares are all squares that are in the attacking view of a piece. These are both legal and illegal moves. For example a piece can threaten the opposite color king even if it is pinned (it can threaten the opponents king even if it could not legally have gone to that square, for example if that would have set its own king in check).
-
-A "Move" in the program is, for perfromance reasons, a tuple: (starting position, end position, end_piece, promotion). In most cases it will be the same piece that was on the starting square, however in the case of pawn promotion, it will be another piece. Therefore, in the code, a "move" (where the starting position is given) is a tuple: (end_position, piece).
+I have played chess casually on and off for a couple of years, and wanted to learn chess programming. Also, since I am not very good at chess, I thought it would be interesting to see if I could create an AI that could play better than me (the bar is not high lol).
 
 ## Development Process 👨‍💻
 
@@ -58,9 +50,11 @@ At this point my code wasn't particulary fast 😅. The image below shows the nu
 
 To calculate the number of nodes at a depth of 5, it takes 7.5 minutes!
 
-The most obvious way to speed up my chess program would be to change to a compiled language such as C or C#. This comes at the cost of development time. A reasonable solution would therefore be to use a JIT-compiler for my already developed code.
+The most obvious way to speed up my chess program would be to change to a compiled language such as C or C#. This comes at the cost of development time. A reasonable solution would therefore be to use a JIT-compiler for my already developed code. However this proved to be challenging as Numba (the JIT library) lacks support a lot of Python functionality. Numba might be an option I revisit in the future.
 
-Running the perft tests was a good way to measure the speed of my code. Before optimization it took my code ~26 seconds to run the tests.
+I ended up optimizing the speed of my code by limiting the number of calculations and array accesses, and rather store more results in memory. There is almost always a space-time tradeoff in software programs, and I chose to optimize on time.
+
+Running the perft tests was a good way to measure the speed of my code. Before optimization it took my code ~26 seconds to run the tests. I managed to reduce this to ~16 seconds, purely by rewriting my code.
 
 ## Cool Resources
 
