@@ -53,6 +53,9 @@ class ChessGUI:
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, outline="red", width=3
                 )
 
+        # Display move number
+        self.canvas.create_text(60, self.game_info_size, text=f"Move {self.game.num_moves}", font=("Arial", 18), fill= "White")
+
         # Display player info
         player_turn = self.game.turn
         player_points = self.game.get_points()
@@ -62,8 +65,6 @@ class ChessGUI:
         # Button to reset the game
         self.canvas.create_rectangle(self.board_size - 100, (self.player_info_size // 2) + self.game_info_size - 20, self.board_size, (self.player_info_size // 2) + self.game_info_size + 20, fill="green")
         self.canvas.create_text(self.board_size - 50, (self.player_info_size // 2) + self.game_info_size, text="Reset", font=("Arial", 18))
-
-
 
         # Display captured pieces as small icons
         self.subsampled_images.clear()
@@ -76,25 +77,30 @@ class ChessGUI:
             image = self.icon_dict[piece].subsample(2, 2)  # Reduce the size of the image by a factor of 2
             self.subsampled_images.append(image)
             self.canvas.create_image(160 + i * 40, self.board_size + self.info_size + self.player_info_size // 2, image=image)
-
+        
         # Display checkmate info
         if self.game.is_checkmate():
             winner_player = "white" if self.game.turn == Player.black else "black"
             self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
-            self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Checkmate! {winner_player} wins!", font=("Arial", 26))
-            self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+            self.canvas.create_text(self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Checkmate! {winner_player} wins!", font=("Arial", 26))
+            self.canvas.create_text(self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text="Click on reset button in top right corner to begin a new game", font=("Arial", 18))
         
         # Display stalemate info
-        if self.game.is_stalemate():
+        elif self.game.is_stalemate():
             self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
-            self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Stalemate! Draw!", font=("Arial", 26))
-            self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+            self.canvas.create_text(self.board_size // 2, (self.board_size + self.info_size) // 2, text="Stalemate! Draw!", font=("Arial", 26))
+            self.canvas.create_text(self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text="Click on reset button in top right corner to begin a new game", font=("Arial", 18))
         
         # Display dead position info
-        if self.game.is_dead_position():
+        elif self.game.is_dead_position():
             self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
-            self.canvas.create_text( self.board_size // 2, (self.board_size + self.info_size) // 2, text=f"Dead position! Draw!", font=("Arial", 26))
-            self.canvas.create_text( self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text=f"Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+            self.canvas.create_text(self.board_size // 2, (self.board_size + self.info_size) // 2, text="Dead position! Draw!", font=("Arial", 26))
+            self.canvas.create_text(self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text="Click on reset button in top right corner to begin a new game", font=("Arial", 18))
+        
+        elif self.game.has_reached_move_limit():
+            self.canvas.create_image(0, 0, image=self.shade_image, anchor='nw')
+            self.canvas.create_text(self.board_size // 2, (self.board_size + self.info_size) // 2, text="Move Limit Reached! Draw!", font=("Arial", 26))
+            self.canvas.create_text(self.board_size // 2, ((self.board_size + self.info_size) // 2) + 50, text="Click on reset button in top right corner to begin a new game", font=("Arial", 18))
         
         # Display check info
         elif self.game.is_in_check(self.game.board, Player.black):

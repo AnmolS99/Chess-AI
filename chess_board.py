@@ -32,6 +32,7 @@ class ChessBoard:
         self.king_position = {Player.white: (7, 4), Player.black: (0, 4)}
         self.possible_en_passant = None
         self.castling_rights = {Player.white: {"king_side": True, "queen_side": True}, Player.black: {"king_side": True, "queen_side": True}}
+        self.num_moves = 0
 
     """Returns all legals moves for a selected piece (in a position)"""
     def get_legal_moves(self, selected_pos):
@@ -117,6 +118,23 @@ class ChessBoard:
     def is_dead_position(self):
         return np.count_nonzero(self.board == -6) == 1 and np.count_nonzero(self.board == 6) == 1 and np.count_nonzero(self.board != 0) == 2
     
+    def has_reached_move_limit(self):
+        return self.num_moves >= 250
+    
+    def is_finished(self):
+        """
+        Returns whether or not the game is finished and the points for 
+        each player as a tuple (is_finished, white_points, black_points)
+        """
+        if self.is_checkmate():
+            if self.turn == Player.black:
+                return (True, 1, 0)
+            return (True, 0, 1)
+        elif self.is_stalemate() or self.is_dead_position() or self.has_reached_move_limit():
+            return (True, 0.5, 0.5)
+        else:
+            return (False, 0, 0)
+    
     def move_piece(self, move):
         start_pos, end_pos, piece = move
         self.board[start_pos] = 0
@@ -160,6 +178,7 @@ class ChessBoard:
             self.possible_en_passant = end_pos
         else:
             self.possible_en_passant = None
+        self.num_moves += 1
         self.turn = Player.white if self.turn == Player.black else Player.black
     
     def hyp_move_piece(self, board, king_position, move, turn):
@@ -211,4 +230,5 @@ class ChessBoard:
         new_board.king_position = copy.deepcopy(self.king_position)
         new_board.possible_en_passant = self.possible_en_passant
         new_board.castling_rights = copy.deepcopy(self.castling_rights)
+        new_board.num_moves = self.num_moves
         return new_board
