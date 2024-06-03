@@ -18,6 +18,7 @@ class ChessGUI:
         self.promotion_to_square = None
         self.selected_pos = None
         self.root = Tk()
+        self.root.title("Chess")
         self.canvas = Canvas(self.root, width=board_size, height=board_size + player_info_size*2 + game_info_size)
         self.square_size = board_size // 8
         self.canvas.pack()
