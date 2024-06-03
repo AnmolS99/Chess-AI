@@ -39,6 +39,12 @@ class ChessGUI:
                 self.canvas.create_rectangle(
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, fill=color
                 )
+                if col == 0:
+                    self.canvas.create_text(
+                        8, (row * self.square_size) + 8 + self.info_size, text=str(8 - row), font=("Arial", 13), fill= "Black" )
+                if row == 7:
+                    self.canvas.create_text(
+                        (col * self.square_size) + 8, self.board_size + self.info_size - 8, text=chr(65 + col), font=("Arial", 13), fill= "Black" )
                 piece = int(self.game.board[row][col])
                 if piece != 0:
 

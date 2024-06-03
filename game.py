@@ -47,5 +47,7 @@ class ChessGame():
     def get_player(self, player_type, player):
         if player_type == PlayerType.Random.name:
             return RandomBot(self.chess_board, self.ui, player)
-        else:
+        elif player_type == PlayerType.User.name:
             return User(self.chess_board, self.ui, player)
+        else:
+            Exception(f"Invalid player_type: {player_type}")
