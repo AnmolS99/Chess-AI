@@ -1,3 +1,4 @@
+from players.minimax_bot import MiniMaxBot
 from players.random_bot import RandomBot
 from players.user import User
 from chess_board import ChessBoard
@@ -45,9 +46,11 @@ class ChessGame():
                 self.ui.root.update()
 
     def get_player(self, player_type, player):
-        if player_type == PlayerType.Random.name:
-            return RandomBot(self.chess_board, self.ui, player)
-        elif player_type == PlayerType.User.name:
+        if player_type == PlayerType.User.name:
             return User(self.chess_board, self.ui, player)
+        elif player_type == PlayerType.Random.name:
+            return RandomBot(self.chess_board, self.ui, player)
+        elif player_type == PlayerType.MiniMax.name:
+            return MiniMaxBot(self.chess_board, self.ui, player)
         else:
             Exception(f"Invalid player_type: {player_type}")

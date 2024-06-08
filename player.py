@@ -7,4 +7,5 @@ class Player(Enum):
 class PlayerType(Enum):
     User = "User",
     Random = "Random"
+    MiniMax = "MiniMax"
     MCTS = "MCTS"
