@@ -8,4 +8,5 @@ class PlayerType(Enum):
     User = "User",
     Random = "Random"
     MiniMax = "MiniMax"
+    AlphaBeta = "AlphaBeta"
     MCTS = "MCTS"

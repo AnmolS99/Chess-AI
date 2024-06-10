@@ -1,3 +1,4 @@
+from players.alpha_beta_bot import AlphaBetaBot
 from players.minimax_bot import MiniMaxBot
 from players.random_bot import RandomBot
 from players.user import User
@@ -17,33 +18,44 @@ class ChessGame():
         self.white_player_type = white_player_type
         self.black_player_type = black_player_type
 
-    def play(self):
+    def play(self, show_ui=True):
 
         white_player = self.get_player(self.white_player_type, Player.white)
         black_player = self.get_player(self.black_player_type, Player.black)
-        self.ui.print_game()
-        self.ui.root.update()
+        if show_ui:
+            self.ui.print_game()
+            self.ui.root.update()
 
         finished = False
-
         while True:
             if self.chess_board.turn == Player.white and not finished:
+                a = time.time()
                 white_player.make_move()
-                self.ui.print_game()
-                self.ui.root.update()
+                b = time.time()
+                print(f"White player took {b - a} sec")
+                if show_ui:
+                    self.ui.print_game()
+                    self.ui.root.update()
             else:
+                a = time.time()
                 black_player.make_move()
-                self.ui.print_game()
-                self.ui.root.update()
+                b = time.time() 
+                print(f"Black player took {b - a} sec")
+                if show_ui:
+                    self.ui.print_game()
+                    self.ui.root.update()
             
 
             finished, white_points, black_points = self.chess_board.is_finished()
             if finished:
-                self.ui.print_game()
-                self.ui.root.update()
-                self.ui.root.wait_variable(self.ui.clicked)
-                self.ui.clicked.set(False)
-                self.ui.root.update()
+                if show_ui:
+                    self.ui.print_game()
+                    self.ui.root.update()
+                    self.ui.root.wait_variable(self.ui.clicked)
+                    self.ui.clicked.set(False)
+                    self.ui.root.update()
+                else:
+                    print(f"White player points: {white_points} - Black player points: {black_points}")
 
     def get_player(self, player_type, player):
         if player_type == PlayerType.User.name:
@@ -52,5 +64,7 @@ class ChessGame():
             return RandomBot(self.chess_board, self.ui, player)
         elif player_type == PlayerType.MiniMax.name:
             return MiniMaxBot(self.chess_board, self.ui, player)
+        elif player_type == PlayerType.AlphaBeta.name:
+            return AlphaBetaBot(self.chess_board, self.ui, player)
         else:
             Exception(f"Invalid player_type: {player_type}")

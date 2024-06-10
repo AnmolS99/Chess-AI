@@ -56,6 +56,10 @@ I ended up optimizing the speed of my code by limiting the number of calculation
 
 Running the perft tests was a good way to measure the speed of my code. Before optimization it took my code ~26 seconds to run the tests. I managed to reduce this to ~16 seconds, purely by rewriting my code.
 
+### Chess AI (Minimax algorithm)
+
+The standard minimax algorithm with a search tree depth of 3 took approximately 20 seconds to calculate one move, which is way too long. After implementing alpha-beta pruning one move on average took 5.6 seconds, meaning that the bot became nearly 4x faster!
+
 ## Cool Resources
 
 Some cool resources I found while developing:
