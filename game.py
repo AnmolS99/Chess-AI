@@ -67,4 +67,4 @@ class ChessGame():
         elif player_type == PlayerType.AlphaBeta.name:
             return AlphaBetaBot(self.chess_board, self.ui, player)
         else:
-            Exception(f"Invalid player_type: {player_type}")
+            raise Exception(f"Invalid player_type: {player_type}. Valid player types: {[ptype.name for ptype in PlayerType]}")

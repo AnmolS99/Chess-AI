@@ -1,10 +1,33 @@
 # Chess ♟️
 
-A comprehensive chess implementation from scratch that includes all functionalities, such as en passant, castling, and pawn promotion. Additionally, a PyGame GUI provides a user-friendly interface for playing the game.
+A comprehensive chess implementation from scratch that includes all functionalities, such as en passant, castling, and pawn promotion. An AI based on the minimax algorithm was also created. Additionally, a PyGame GUI provides a user-friendly interface for playing the game.
 
 ## Motivation 💪
 
-I have played chess casually on and off for a couple of years, and wanted to learn chess programming. Also, since I am not very good at chess, I thought it would be interesting to see if I could create an AI that could play better than me (the bar is not high lol).
+I have played chess casually on and off for a couple of years, and wanted to learn chess programming. Also, since I am not very good at chess, I thought it would be interesting to see if I could create an AI that could play better than me.
+
+## Installation 📦
+
+To install the required packages, use the following command: `pip install -r requirements.txt`
+
+## Playing Chess
+
+To play a game of chess simply run:
+
+`python3 main.py`
+
+This will run the game with user input for both white and black player.
+
+For both white and black player you can choose different player types:
+
+-   User - User input
+-   Random - Random legal moves
+-   MiniMax - AI Bot
+-   AlphaBeta - Minimax, but faster
+
+If you, as the white player, want to play against the AlphaBeta bot you would run:
+
+`python3 main.py User AlphaBeta`
 
 ## Development Process 👨‍💻
 
@@ -64,5 +87,6 @@ The standard minimax algorithm with a search tree depth of 3 took approximately 
 
 Some cool resources I found while developing:
 
+-   The book I have used to learn about minimax, alpha-beta, and AI in general: _Russell, S. J., & Norvig, P. (2016). Artificial intelligence : a modern approach (3rd ed.; Global ed.). Pearson._
 -   Video that inspired me to do this project: https://www.youtube.com/watch?v=U4ogK0MIzqk
 -   Website to analyse your chess games for free: https://chess.wintrcat.uk/
