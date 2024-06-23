@@ -6,10 +6,11 @@ import numpy as np
 
 class AlphaBetaBot():
 
-    def __init__(self, chess_board: ChessBoard, ui: ChessGUI, player: Player) -> None:
+    def __init__(self, chess_board: ChessBoard, ui: ChessGUI, player: Player, move_ordering = True) -> None:
         self.chess_board = chess_board
         self.ui = ui
         self.player = player
+        self.move_ordering = move_ordering
         
     def make_move(self):
         if self.chess_board.turn == self.player:
@@ -24,7 +25,7 @@ class AlphaBetaBot():
         if self.player == Player.white:
             max_value_move = None
             max_value = -np.inf
-            for move in self.chess_board.get_all_legal_moves():
+            for move in self.chess_board.get_all_legal_moves(move_ordering=self.move_ordering):
                 chess_board_copy = self.chess_board.copy()
                 chess_board_copy.move_piece(move)
                 min_value = self.min_value(chess_board_copy, depth - 1, alpha, beta)
@@ -36,7 +37,7 @@ class AlphaBetaBot():
         else:
             min_value_move = None
             min_value = np.inf
-            for move in self.chess_board.get_all_legal_moves():
+            for move in self.chess_board.get_all_legal_moves(move_ordering=self.move_ordering):
                 chess_board_copy = self.chess_board.copy()
                 chess_board_copy.move_piece(move)
                 max_value = self.max_value(chess_board_copy, depth - 1, alpha, beta)
@@ -62,7 +63,7 @@ class AlphaBetaBot():
             return chess_board.get_points()[Player.white]
         else:
             max_value = -np.inf
-            for move in chess_board.get_all_legal_moves():
+            for move in chess_board.get_all_legal_moves(move_ordering=self.move_ordering):
                 chess_board_copy = chess_board.copy()
                 chess_board_copy.move_piece(move)
                 max_value = max(max_value, self.min_value(chess_board_copy, depth - 1, alpha, beta))
@@ -87,7 +88,7 @@ class AlphaBetaBot():
             return chess_board.get_points()[Player.white]
         else:
             min_value = np.inf
-            for move in chess_board.get_all_legal_moves():
+            for move in chess_board.get_all_legal_moves(move_ordering=self.move_ordering):
                 chess_board_copy = chess_board.copy()
                 chess_board_copy.move_piece(move)
                 min_value = min(min_value, self.max_value(chess_board_copy, depth - 1, alpha, beta))

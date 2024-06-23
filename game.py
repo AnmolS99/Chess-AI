@@ -27,20 +27,14 @@ class ChessGame():
             self.ui.root.update()
 
         finished = False
-        while True:
+        while not finished:
             if self.chess_board.turn == Player.white and not finished:
-                a = time.time()
                 white_player.make_move()
-                b = time.time()
-                print(f"White player took {b - a} sec")
                 if show_ui:
                     self.ui.print_game()
                     self.ui.root.update()
             else:
-                a = time.time()
                 black_player.make_move()
-                b = time.time() 
-                print(f"Black player took {b - a} sec")
                 if show_ui:
                     self.ui.print_game()
                     self.ui.root.update()
@@ -56,6 +50,7 @@ class ChessGame():
                     self.ui.root.update()
                 else:
                     print(f"White player points: {white_points} - Black player points: {black_points}")
+        return white_points, black_points
 
     def get_player(self, player_type, player):
         if player_type == PlayerType.User.name:

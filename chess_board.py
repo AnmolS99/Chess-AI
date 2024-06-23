@@ -45,11 +45,14 @@ class ChessBoard:
         return legal_moves
     
     """Returns all legals moves for a player"""
-    def get_all_legal_moves(self):
+    def get_all_legal_moves(self, move_ordering = False):
         all_legal_moves = []
         for pos in board_positions:
             if self.board[pos] * self.turn.value > 0:
                 all_legal_moves.extend(self.get_legal_moves(pos))
+        # Sort so that moves that capture opponent pieces come first
+        if move_ordering:
+            all_legal_moves.sort(key=lambda move: move[3], reverse=True)
         return all_legal_moves
     
     """Returns all possible moves for a selected piece (in a position). NOTE that this function does not check if the move puts the king in check."""
@@ -106,7 +109,7 @@ class ChessBoard:
         else:
             king_pos = king_position[turn]
         if king_pos is not None:
-            return king_pos in [end_pos for (start_pos, end_pos, piece) in self.get_all_possible_capture_moves(board, -turn.value)]
+            return king_pos in [end_pos for (start_pos, end_pos, piece, capture) in self.get_all_possible_capture_moves(board, -turn.value)]
         return False
     
     def is_checkmate(self):
@@ -136,7 +139,7 @@ class ChessBoard:
             return (False, 0, 0)
     
     def move_piece(self, move):
-        start_pos, end_pos, piece = move
+        start_pos, end_pos, piece, capture = move
         self.board[start_pos] = 0
         if self.board[end_pos] != 0:
             self.captured_pieces[self.turn].append(self.board[end_pos])
@@ -182,7 +185,7 @@ class ChessBoard:
         self.turn = Player.white if self.turn == Player.black else Player.black
     
     def hyp_move_piece(self, board, king_position, move, turn):
-        start_pos, end_pos, piece = move
+        start_pos, end_pos, piece, capture = move
         board[start_pos] = 0
         if abs(piece) == 1 and board[end_pos] == 0 and start_pos[1] != end_pos[1]:
             board[(start_pos[0], end_pos[1])] = 0

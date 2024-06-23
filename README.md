@@ -22,8 +22,8 @@ For both white and black player you can choose different player types:
 
 -   User - User input
 -   Random - Random legal moves
--   MiniMax - AI Bot
--   AlphaBeta - Minimax, but faster
+-   MiniMax - AI Bot (default search tree depth = 2)
+-   AlphaBeta - Minimax, but faster (default search tree depth = 3)
 
 If you, as the white player, want to play against the AlphaBeta bot you would run:
 
@@ -82,6 +82,10 @@ Running the perft tests was a good way to measure the speed of my code. Before o
 ### Chess AI (Minimax algorithm)
 
 The standard minimax algorithm with a search tree depth of 3 took approximately 20 seconds to calculate one move, which is way too long. After implementing alpha-beta pruning one move on average took 5.6 seconds, meaning that the bot became nearly 4x faster!
+
+### Move Ordering
+
+By looking at moves that capture opponent pieces first, the algorithm became roughly twice as fast!
 
 ## Cool Resources
 

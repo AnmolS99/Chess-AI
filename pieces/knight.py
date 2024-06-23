@@ -14,25 +14,45 @@ class Knight(Piece):
         moves = []
         x, y = pos
         if x > 1:
-            if y > 0 and board[x - 2][y - 1] * color_value <= 0:
-                moves.append((pos, (x - 2, y - 1), piece_value))
-            if y < 7 and board[x - 2][y + 1] * color_value <= 0:
-                moves.append((pos, (x - 2, y + 1), piece_value))
+            if y > 0 and board[x - 2][y - 1] * color_value == 0:
+                moves.append((pos, (x - 2, y - 1), piece_value, False))
+            elif y > 0 and board[x - 2][y - 1] * color_value < 0:
+                moves.append((pos, (x - 2, y - 1), piece_value,True))
+
+            if y < 7 and board[x - 2][y + 1] * color_value == 0:
+                moves.append((pos, (x - 2, y + 1), piece_value, False))
+            elif y < 7 and board[x - 2][y + 1] * color_value < 0:
+                moves.append((pos, (x - 2, y + 1), piece_value, True))
         if x > 0:
-            if y > 1 and board[x - 1][y - 2] * color_value <= 0:
-                moves.append((pos, (x - 1, y - 2), piece_value))
-            if y < 6 and board[x - 1][y + 2] * color_value <= 0:
-                moves.append((pos, (x - 1, y + 2), piece_value))
+            if y > 1 and board[x - 1][y - 2] * color_value == 0:
+                moves.append((pos, (x - 1, y - 2), piece_value, False))
+            elif y > 1 and board[x - 1][y - 2] * color_value < 0:
+                moves.append((pos, (x - 1, y - 2), piece_value, True))
+
+            if y < 6 and board[x - 1][y + 2] * color_value == 0:
+                moves.append((pos, (x - 1, y + 2), piece_value, False))
+            elif y < 6 and board[x - 1][y + 2] * color_value < 0:
+                moves.append((pos, (x - 1, y + 2), piece_value, True))
         if x < 6:
-            if y > 0 and board[x + 2][y - 1] * color_value <= 0:
-                moves.append((pos, (x + 2, y - 1), piece_value))
-            if y < 7 and board[x + 2][y + 1] * color_value <= 0:
-                moves.append((pos, (x + 2, y + 1), piece_value))
+            if y > 0 and board[x + 2][y - 1] * color_value == 0:
+                moves.append((pos, (x + 2, y - 1), piece_value, False))
+            elif y > 0 and board[x + 2][y - 1] * color_value < 0:
+                moves.append((pos, (x + 2, y - 1), piece_value, True))
+
+            if y < 7 and board[x + 2][y + 1] * color_value == 0:
+                moves.append((pos, (x + 2, y + 1), piece_value, False))
+            elif y < 7 and board[x + 2][y + 1] * color_value < 0:
+                moves.append((pos, (x + 2, y + 1), piece_value, True))
         if x < 7:
-            if y > 1 and board[x + 1][y - 2] * color_value <= 0:
-                moves.append((pos, (x + 1, y - 2), piece_value))
-            if y < 6 and board[x + 1][y + 2] * color_value <= 0:
-                moves.append((pos, (x + 1, y + 2), piece_value))
+            if y > 1 and board[x + 1][y - 2] * color_value == 0:
+                moves.append((pos, (x + 1, y - 2), piece_value, False))
+            elif y > 1 and board[x + 1][y - 2] * color_value < 0:
+                moves.append((pos, (x + 1, y - 2), piece_value, True))
+
+            if y < 6 and board[x + 1][y + 2] * color_value == 0:
+                moves.append((pos, (x + 1, y + 2), piece_value, False))
+            elif y < 6 and board[x + 1][y + 2] * color_value < 0:
+                moves.append((pos, (x + 1, y + 2), piece_value, True))
         return moves
     
     @staticmethod

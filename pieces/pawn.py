@@ -30,31 +30,31 @@ class Pawn(Piece):
             forward_right = (x + 1, y + 1)
         if x == start:
             if board[forward] == 0:
-                moves.append((pos, forward, piece_value))
+                moves.append((pos, forward, piece_value, False))
                 if board[double_forward] == 0:
-                    moves.append((pos, double_forward, piece_value))
+                    moves.append((pos, double_forward, piece_value, False))
         else:
             if board[forward] == 0:
                 if x == pro_promotion:
                     for promotion_piece in promotion_pieces_value:
-                        moves.append((pos, forward, promotion_piece))    
+                        moves.append((pos, forward, promotion_piece, False))    
                 else:
-                    moves.append((pos, forward, piece_value))
+                    moves.append((pos, forward, piece_value, False))
         if y > 0 and board[forward_left] * color_value < 0:
             if x == pro_promotion:
                 for promotion_piece in promotion_pieces_value:
-                    moves.append((pos, forward_left, promotion_piece))    
+                    moves.append((pos, forward_left, promotion_piece, True))    
             else:
-                moves.append((pos, forward_left, piece_value))
+                moves.append((pos, forward_left, piece_value, True))
         if y < 7 and board[forward_right] * color_value < 0:
             if x == pro_promotion:
                 for promotion_piece in promotion_pieces_value:
-                    moves.append((pos, forward_right, promotion_piece))    
+                    moves.append((pos, forward_right, promotion_piece, True))    
             else:
-                moves.append((pos, forward_right, piece_value))
+                moves.append((pos, forward_right, piece_value, True))
         if possible_en_passant is not None:
             if board[possible_en_passant] == -piece_value and possible_en_passant[0] == x and (possible_en_passant[1] == y - 1 or possible_en_passant[1] == y + 1):
-                moves.append((pos, (possible_en_passant[0] - color_value, possible_en_passant[1]), piece_value))
+                moves.append((pos, (possible_en_passant[0] - color_value, possible_en_passant[1]), piece_value, True))
         return moves
     
     @staticmethod
@@ -64,13 +64,13 @@ class Pawn(Piece):
         x, y = pos
         if color_value == Player.white.value:
             if y > 0:
-                capture_moves.append((pos, (x - 1, y - 1), piece_value))
+                capture_moves.append((pos, (x - 1, y - 1), piece_value, True))
             if y < 7:
-                capture_moves.append((pos, (x - 1, y + 1), piece_value))
+                capture_moves.append((pos, (x - 1, y + 1), piece_value, True))
         else:
             if y > 0:
-                capture_moves.append((pos, (x + 1, y - 1), piece_value))
+                capture_moves.append((pos, (x + 1, y - 1), piece_value, True))
             if y < 7:
-                capture_moves.append((pos, (x + 1, y + 1), piece_value))
+                capture_moves.append((pos, (x + 1, y + 1), piece_value, True))
 
         return capture_moves
