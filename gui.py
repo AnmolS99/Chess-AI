@@ -55,7 +55,7 @@ class ChessGUI:
 
         # Display selected piece legal moves
         if self.selected_pos is not None:
-            for (_, end_pos, _) in self.game.get_legal_moves(self.selected_pos):
+            for (_, end_pos, _, _) in self.game.get_legal_moves(self.selected_pos):
                 row, col = end_pos
                 self.canvas.create_rectangle(
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, outline="red", width=3
@@ -131,13 +131,13 @@ class ChessGUI:
             y_range_start = ((self.board_size + self.info_size) // 2)
             y_range_end = ((self.board_size + self.info_size) // 2) + 100
             if 100 < event.x <= 200 and y_range_start < event.y < y_range_end:
-                self.game.move_piece((self.selected_pos, self.promotion_to_square, 2*self.game.turn.value))
+                self.game.move_piece((self.selected_pos, self.promotion_to_square, 2*self.game.turn.value, None))
             elif 200 < event.x <= 300 and y_range_start < event.y < y_range_end:
-                self.game.move_piece((self.selected_pos, self.promotion_to_square, 3*self.game.turn.value))
+                self.game.move_piece((self.selected_pos, self.promotion_to_square, 3*self.game.turn.value, None))
             elif 300 < event.x <= 400 and y_range_start < event.y < y_range_end:
-                self.game.move_piece((self.selected_pos, self.promotion_to_square, 4*self.game.turn.value))
+                self.game.move_piece((self.selected_pos, self.promotion_to_square, 4*self.game.turn.value, None))
             elif 400 < event.x <= 500 and y_range_start < event.y < y_range_end:
-                self.game.move_piece((self.selected_pos, self.promotion_to_square, 5*self.game.turn.value))
+                self.game.move_piece((self.selected_pos, self.promotion_to_square, 5*self.game.turn.value, None))
             
             self.selected_pos = None
             self.show_promotion = False
@@ -162,15 +162,16 @@ class ChessGUI:
         row = (event.y - self.info_size) // self.square_size # Account for the space above the board
         if self.selected_pos is not None:
             piece = self.game.board[self.selected_pos]
+            is_capture = piece * self.game.board[(row, col)] < 0
             # If attempting promotion
             if (piece == 1 and row == 0) or (piece == -1 and row == 7):
-                promotion_move = (self.selected_pos, (row, col), 5 * self.game.turn.value)
+                promotion_move = (self.selected_pos, (row, col), 5 * self.game.turn.value, is_capture)
                 if promotion_move in self.game.get_legal_moves(self.selected_pos):
                     # If promotion legal
                     self.show_promotion = True
                     self.promotion_to_square = (row, col)
             else:
-                move = (self.selected_pos, (row, col), piece)
+                move = (self.selected_pos, (row, col), piece, is_capture)
                 if move in self.game.get_legal_moves(self.selected_pos):
                     self.game.move_piece(move)
                 self.selected_pos = None

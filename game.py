@@ -1,4 +1,5 @@
 from players.alpha_beta_bot import AlphaBetaBot
+from players.alpha_beta_bot_v2 import AlphaBetaBotV2
 from players.minimax_bot import MiniMaxBot
 from players.random_bot import RandomBot
 from players.user import User
@@ -61,5 +62,7 @@ class ChessGame():
             return MiniMaxBot(self.chess_board, self.ui, player)
         elif player_type == PlayerType.AlphaBeta.name:
             return AlphaBetaBot(self.chess_board, self.ui, player)
+        elif player_type == PlayerType.AlphaBetaV2.name:
+            return AlphaBetaBotV2(self.chess_board, self.ui, player)
         else:
             raise Exception(f"Invalid player_type: {player_type}. Valid player types: {[ptype.name for ptype in PlayerType]}")

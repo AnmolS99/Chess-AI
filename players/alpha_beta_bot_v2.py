@@ -3,8 +3,80 @@ from gui import ChessGUI
 from player import Player
 import numpy as np
 
+square_eval = { 
+# Pawn
+1: [
+ [0,  0,  0,  0,  0,  0,  0,  0],
+[50, 50, 50, 50, 50, 50, 50, 50],
+[10, 10, 20, 30, 30, 20, 10, 10],
+ [5,  5, 10, 25, 25, 10,  5,  5],
+ [0,  0,  0, 20, 20,  0,  0,  0],
+ [5, -5,-10,  0,  0,-10, -5,  5],
+ [5, 10, 10,-20,-20, 10, 10,  5],
+ [0,  0,  0,  0,  0,  0,  0,  0]
+ ],
 
-class AlphaBetaBot():
+# Rook
+ 2: [
+ [0,  0,  0,  0,  0,  0,  0,  0],
+  [5, 10, 10, 10, 10, 10, 10,  5],
+ [-5,  0,  0,  0,  0,  0,  0, -5],
+ [-5,  0,  0,  0,  0,  0,  0, -5],
+ [-5,  0,  0,  0,  0,  0,  0, -5],
+ [-5,  0,  0,  0,  0,  0,  0, -5],
+ [-5,  0,  0,  0,  0,  0,  0, -5],
+  [0,  0,  0,  5,  5,  0,  0,  0]
+  ],
+
+  # Knight
+  3: [
+[ -50,-40,-30,-30,-30,-30,-40,-50],
+[-40,-20,  0,  0,  0,  0,-20,-40],
+[-30,  0, 10, 15, 15, 10,  0,-30],
+[-30,  5, 15, 20, 20, 15,  5,-30],
+[-30,  0, 15, 20, 20, 15,  0,-30],
+[-30,  5, 10, 15, 15, 10,  5,-30],
+[-40,-20,  0,  5,  5,  0,-20,-40],
+[-50,-40,-30,-30,-30,-30,-40,-50],
+  ],
+
+  # Bishop
+  4: [
+[-20,-10,-10,-10,-10,-10,-10,-20],
+[-10,  0,  0,  0,  0,  0,  0,-10],
+[-10,  0,  5, 10, 10,  5,  0,-10],
+[-10,  5,  5, 10, 10,  5,  5,-10],
+[-10,  0, 10, 10, 10, 10,  0,-10],
+[-10, 10, 10, 10, 10, 10, 10,-10],
+[-10,  5,  0,  0,  0,  0,  5,-10],
+[-20,-10,-10,-10,-10,-10,-10,-20],
+  ],
+
+# Queen
+  5: [
+[-20,-10,-10, -5, -5,-10,-10,-20],
+[-10,  0,  0,  0,  0,  0,  0,-10],
+[-10,  0,  5,  5,  5,  5,  0,-10],
+ [-5,  0,  5,  5,  5,  5,  0, -5],
+  [0,  0,  5,  5,  5,  5,  0, -5],
+[-10,  5,  5,  5,  5,  5,  0,-10],
+[-10,  0,  5,  0,  0,  0,  0,-10],
+[-20,-10,-10, -5, -5,-10,-10,-20]
+  ],
+
+# King (middlegame)
+  6: [
+[-30,-40,-40,-50,-50,-40,-40,-30],
+[-30,-40,-40,-50,-50,-40,-40,-30],
+[-30,-40,-40,-50,-50,-40,-40,-30],
+[-30,-40,-40,-50,-50,-40,-40,-30],
+[-20,-30,-30,-40,-40,-30,-30,-20],
+[-10,-20,-20,-20,-20,-20,-20,-10],
+[ 20, 20,  0,  0,  0,  0, 20, 20],
+[ 20, 30, 10,  0,  0, 10, 30, 20]
+  ]}
+
+class AlphaBetaBotV2():
 
     def __init__(self, chess_board: ChessBoard, ui: ChessGUI, player: Player, depth: int = 3, move_ordering = True) -> None:
         self.chess_board = chess_board
@@ -61,7 +133,7 @@ class AlphaBetaBot():
             else:
                 return 0
         elif depth == 0:
-            return chess_board.get_points()[Player.white]
+            return self.eval_state(chess_board)
         else:
             max_value = -np.inf
             for move in chess_board.get_all_legal_moves(move_ordering=self.move_ordering):
@@ -86,7 +158,7 @@ class AlphaBetaBot():
             else:
                 return 0
         elif depth == 0:
-            return chess_board.get_points()[Player.white]
+            return self.eval_state(chess_board)
         else:
             min_value = np.inf
             for move in chess_board.get_all_legal_moves(move_ordering=self.move_ordering):
@@ -97,3 +169,16 @@ class AlphaBetaBot():
                     return min_value
                 beta = min(beta, min_value)
             return min_value
+    
+    def eval_state(self, chess_board: ChessBoard):
+        evaluation = chess_board.get_points()[Player.white] * 1000
+        for row in range(8):
+            for col in range(8):
+                piece = chess_board.board[row][col]
+                if piece == 0:
+                    continue
+                elif piece > 0:
+                    evaluation += square_eval[piece][row][col]
+                elif piece < 0:
+                    evaluation -= square_eval[abs(piece)][7 - row][col]
+        return evaluation

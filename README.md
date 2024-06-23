@@ -22,8 +22,9 @@ For both white and black player you can choose different player types:
 
 -   User - User input
 -   Random - Random legal moves
--   MiniMax - AI Bot (default search tree depth = 2)
--   AlphaBeta - Minimax, but faster (default search tree depth = 3)
+-   MiniMax - AI Bot based on minimax algorithm (default search tree depth = 2)
+-   AlphaBeta - Minimax with alpha-beta pruning, making it faster (default search tree depth = 3)
+-   AlphaBetaV2 - AlphaBeta, with piece square evaluation (default search tree depth = 3)
 
 If you, as the white player, want to play against the AlphaBeta bot you would run:
 
@@ -87,10 +88,19 @@ The standard minimax algorithm with a search tree depth of 3 took approximately 
 
 By looking at moves that capture opponent pieces first, the algorithm became roughly twice as fast!
 
+### Piece square evaluation
+
+In addition to captures of opponent pieces, evaluates board states based on piece positions. Especially useful in the beginning phase of the game.
+
+## TODO
+
+-   Test rating of AlphaBeta and AlphaBetaV2
+
 ## Cool Resources
 
 Some cool resources I found while developing:
 
 -   The book I have used to learn about minimax, alpha-beta, and AI in general: _Russell, S. J., & Norvig, P. (2016). Artificial intelligence : a modern approach (3rd ed.; Global ed.). Pearson._
+-   Piece-Square Tables: https://www.chessprogramming.org/Simplified_Evaluation_Function
 -   Video that inspired me to do this project: https://www.youtube.com/watch?v=U4ogK0MIzqk
 -   Website to analyse your chess games for free: https://chess.wintrcat.uk/

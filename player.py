@@ -9,4 +9,5 @@ class PlayerType(Enum):
     Random = "Random"
     MiniMax = "MiniMax"
     AlphaBeta = "AlphaBeta"
+    AlphaBetaV2 = "AlphaBetaV2"
     MCTS = "MCTS"
