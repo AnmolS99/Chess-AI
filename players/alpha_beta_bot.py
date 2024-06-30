@@ -30,7 +30,7 @@ class AlphaBetaBot():
                 chess_board_copy = self.chess_board.copy()
                 chess_board_copy.move_piece(move)
                 min_value = self.min_value(chess_board_copy, self.depth - 1, alpha, beta)
-                if min_value > max_value:
+                if min_value > max_value or max_value_move is None:
                     max_value = min_value
                     max_value_move = move
                 alpha = max(alpha, max_value)
@@ -42,7 +42,7 @@ class AlphaBetaBot():
                 chess_board_copy = self.chess_board.copy()
                 chess_board_copy.move_piece(move)
                 max_value = self.max_value(chess_board_copy, self.depth - 1, alpha, beta)
-                if max_value < min_value:
+                if max_value < min_value or min_value_move is None:
                     min_value = max_value
                     min_value_move = move
                 beta = min(beta, min_value)

@@ -60,7 +60,7 @@ Given this info I could find out what node(s) at depth 1 lead to the discrepanci
 
 For my program, these tests revealed a couple of bugs I was unaware of, mostly regarding castling.
 
-All perfts from the Chess Programming Wiki can be run on my program by running the following command:
+All perfts from the Chess Programming Wiki can be run on my engine with the following command:
 
 `python3 perft.py`
 
@@ -92,13 +92,19 @@ By looking at moves that capture opponent pieces first, the algorithm became rou
 
 In addition to captures of opponent pieces, evaluates board states based on piece positions. Especially useful in the beginning phase of the game.
 
-## TODO
+## Evaluating Bots
 
--   Test rating of AlphaBeta and AlphaBetaV2
+Since the AI bots are based on a deterministic algorithms, each game they play against each other from the starting position are played out the same. Therefore, to evaluate their performance relalative to each other, I tested them against each other on 10 different (but roughly equal evaluation) positions. Two games were played with each position, so that both players played as white once.
+
+AlphaBetaV2 vs. AlphaBeta (both with depth = 2) ended up with 8 wins for AlphaBetaV2 and 12 draws out of 20 matches, demonstrating the impact of piece square evaluation.
+
+Below is the game between AlphaBeta (white) and AlphaBetaV2 (black) playing the French Defense.
+
+<img alt="AlphaBeta vs. AlphaBetaV2 (French Defense)" src="./README_images/alphabetaV2_vs_alphabeta.gif" width="400">
 
 ## Cool Resources
 
-Some cool resources I found while developing:
+Some cool resources I found while working on this project:
 
 -   The book I have used to learn about minimax, alpha-beta, and AI in general: _Russell, S. J., & Norvig, P. (2016). Artificial intelligence : a modern approach (3rd ed.; Global ed.). Pearson._
 -   Piece-Square Tables: https://www.chessprogramming.org/Simplified_Evaluation_Function
