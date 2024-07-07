@@ -1,21 +1,22 @@
 # Chess ♟️
 
-A comprehensive chess implementation from scratch that includes all functionalities, such as en passant, castling, and pawn promotion. An AI based on the minimax algorithm was also created. Additionally, a PyGame GUI provides a user-friendly interface for playing the game.
+A comprehensive chess implementation from scratch that includes all functionalities, such as en passant, castling, and pawn promotion. AI bots based on the minimax and alpha-beta algorithms were also created. Additionally, a PyGame GUI provides a user-friendly interface for playing the game.
 
 ## Table of contents
 
--   [Motivation 💪](#motivation-)
--   [Installation 📦](#installation-)
+-   [Motivation 💪](#motivation-💪)
+-   [Installation 📦](#installation-📦)
 -   [Playing Chess](#playing-chess)
--   [Development Process 👨‍💻](#development-process-)
+-   [Development Process 👨‍💻](#development-process-👨‍💻)
     -   [Testing](#testing)
     -   [Optimization](#optimization)
     -   [Chess AI (Minimax algorithm)](#chess-ai-minimax-algorithm)
+    -   [Alpha-Beta algorithm](#alpha-beta-algorithm)
     -   [Move Ordering](#move-ordering)
     -   [Piece square evaluation](#piece-square-evaluation)
     -   [Evaluating Bots](#evaluating-bots)
 -   [What I have learned](#what-i-have-learned)
--   [Future work 🚀](#future-work-)
+-   [Future work 🚀](#future-work-🚀)
 -   [Cool Resources](#cool-resources)
 
 ## Motivation 💪
@@ -26,7 +27,7 @@ I have played chess casually on and off for a couple of years, and wanted to lea
 
 To install the required packages, use the following command: `pip install -r requirements.txt`
 
-## Playing Chess
+## Playing chess
 
 To play a game of chess simply run:
 
@@ -46,7 +47,7 @@ If you, as the white player, want to play against the AlphaBeta bot you would ru
 
 `python3 main.py User AlphaBeta`
 
-## Development Process 👨‍💻
+## Development process 👨‍💻
 
 I wanted to document my development process as it might be useful for anyone who might want to try a similar project themselves 😄
 
@@ -98,17 +99,30 @@ Running the perft tests was a good way to measure the speed of my code. Before o
 
 ### Chess AI (Minimax algorithm)
 
+The chess AI was based on the minimax algorithm, which is what the world's strongest chess engine, Stockfish, is based on.
+
+Minimax is a search algorithm that looks evaluates all possible states after a certain amount of moves (also called depth). For example, a depth of 2 would result in a tree of all of the possible moves for the player whose turn it is, and all possible respones for each of these moves for the opponent. The leaf nodes are evaluated using an evaluation function.
+
+The first chess AI I created was based on this, and the evaluation function looked at the difference in material (pieces) between white and black.
+
+### Alpha-Beta algorithm
+
+As the number of possible states of a game grows very fast with the depth, it would be helpful to be able to prune some states. This can be done with the alpha-beta algorithm, which is similar to the minimax algorithm, but with pruning, making it faster. Sebastian Lague has a [nice video](https://www.youtube.com/watch?v=l-hh51ncgDI) explaining both algorithms.
+
 The standard minimax algorithm with a search tree depth of 3 took approximately 20 seconds to calculate one move, which is way too long. After implementing alpha-beta pruning one move on average took 5.6 seconds, meaning that the bot became nearly 4x faster!
 
-### Move Ordering
+### Move ordering
 
-By looking at moves that capture opponent pieces first, the algorithm became roughly twice as fast!
+To make the chess AI faster, we want to prune as many branches ass possible. To do this we could order the moves, so that we look at the best ones first. Typically these are moves that capture the opponents pieces.
+By looking at at these moves first, the algorithm became roughly twice as fast!
 
 ### Piece square evaluation
 
-In addition to captures of opponent pieces, evaluates board states based on piece positions. Especially useful in the beginning phase of the game.
+Alpha-beta pruning makes the chess AI faster, but not any better. To improve the skills of the AI, we need to improve the evaluation function. In other words, the evaluation function needs to give a better estimate of truly how good a position is.
 
-### Evaluating Bots
+As a start we evaluated a state solely based on the material difference between the players. This is a simple and naive approach, as a lot of states (may be advantagous for black or white) may have the same material difference. A better approach would be to look at the positions of the different pieces. It is, for example, known that having control of the centre of the board is generally good, or that you want to avoid having knights on the edge of the board. We can incorprate this knowledge by using piece square evaulation tables. These tables lets us assign a value for each piece depending on their position. You could do this for all pieces for each player and look at the difference. I decided to add this difference to the evaluation function, and saw huge improvements in the skill level of the AI, especially in the opening play.
+
+### Evaluating bots
 
 Since the AI bots are based on a deterministic algorithms, each game they play against each other from the starting position are played out the same. Therefore, to evaluate their performance relalative to each other, I tested them against each other on 10 different (but roughly equal evaluation) positions. Two games were played with each position, so that both players played as white once.
 
@@ -122,9 +136,11 @@ Below is the game between AlphaBeta (white) and AlphaBetaV2 (black) playing the 
 
 This was a challenging but fun project! Implementing chess and testing the chess engine was more time consuming than first expected.
 
+As a side note: I use Github Copilot in my daily work, but decided to disable it for this project. It undoubtebly made this project last longer, but I felt that I got a better grasp of the chess engine and AI algorithms when I had to implement and debug them on my own.
+
 Through this project I have gotten a glimpse of the vast field of chess programming. It was also nice to refresh my knowledge on the minimax algorithm with alpha-beta pruning, and also implement enhancement such as move ordering 😄
 
-All in all it was rewarding (and a bit sad) to create an AI that is better than me at chess.
+All in all it was very rewarding (and a bit sad) to create an AI that is better than me at chess.
 
 ## Future work 🚀
 
@@ -134,11 +150,12 @@ In the future it would be interesting to:
 
 -   Build an AI bot based on a ML approach, such as MCTS with Deep RL. This is the approach used by [AlphaZero](https://www.chessprogramming.org/AlphaZero#Network_Architecture). I have [implemented this technique before](https://github.com/AnmolS99/MCTS-Deep-RL) for the game of Hex, but it would be interesting to see how well it works for chess.
 
-## Cool Resources
+## Cool resources
 
 Some cool resources I found while working on this project:
 
 -   The book I have used to learn about minimax, alpha-beta, and AI in general: [_Russell, S. J., & Norvig, P. (2016). Artificial intelligence : a modern approach (3rd ed.; Global ed.). Pearson._](https://people.engr.tamu.edu/guni/csce421/files/AI_Russell_Norvig.pdf)
 -   [Piece-Square Tables](https://www.chessprogramming.org/Simplified_Evaluation_Function)
 -   [Video that inspired me to do this project](https://www.youtube.com/watch?v=U4ogK0MIzqk)
+-   [Short video explaining how to program a chess engine](https://www.youtube.com/watch?v=w4FFX_otR-4)
 -   [Website to analyse your chess games for free](https://chess.wintrcat.uk/)
