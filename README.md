@@ -43,9 +43,9 @@ For both white and black player you can choose different player types:
 -   AlphaBeta - Minimax with alpha-beta pruning, making it faster (default search tree depth = 3)
 -   AlphaBetaV2 - AlphaBeta, with piece square evaluation (default search tree depth = 3)
 
-If you, as the white player, want to play against the AlphaBeta bot you would run:
+If you, as the white player, want to play against the AlphaBetaV2 bot you would run:
 
-`python3 main.py User AlphaBeta`
+`python3 main.py User AlphaBetaV2`
 
 ## Development process 👨‍💻
 
