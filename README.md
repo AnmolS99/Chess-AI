@@ -105,6 +105,10 @@ Minimax is a search algorithm that looks evaluates all possible states after a c
 
 The first chess AI I created was based on this, and the evaluation function looked at the difference in material (pieces) between white and black.
 
+<img alt="Minimax tree" src="./README_images/minimax_tree.png" width="500" >
+
+_Image from [R-bloggers](https://www.r-bloggers.com/2022/07/programming-a-simple-minimax-chess-engine-in-r/)_
+
 ### Alpha-Beta algorithm
 
 As the number of possible states of a game grows very fast with the depth, it would be helpful to be able to prune some states. This can be done with the alpha-beta algorithm, which is similar to the minimax algorithm, but with pruning, making it faster. Sebastian Lague has a [nice video](https://www.youtube.com/watch?v=l-hh51ncgDI) explaining both algorithms.
