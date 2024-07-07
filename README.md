@@ -55,7 +55,7 @@ I wanted to document my development process as it might be useful for anyone who
 
 Checking if a chess implementation is correct may seem difficult given the large number of different states a game can be in. Certain specific situations occur relatively rarely, such as en passant, castling, and pawn promotion.
 
-A good way to test that the game logic is correct is to take a game state (FEN string) and calculate the number of different states you can end up at different depths. A depth here is defined as a move for one player, also known as a ply. One could look at this as a tree structure, where the nodes are game states and edges are the moves leading to those nodes. This testing method is known [perft](https://www.chessprogramming.org/Perft).
+A good way to test that the game logic is correct is to take a game state (FEN string) and calculate the number of different states you can end up at different depths. A depth here is defined as a move for one player, also known as a ply. One could look at this as a tree structure, where the nodes are game states and edges are the moves leading to those nodes. This testing method is known as [perft](https://www.chessprogramming.org/Perft).
 
 For example, at the initial state of a chess game, white player has the possibility to make one of 20 different moves. This means that at a depth of 1, there are 20 nodes. Black player has the possibility of making the exactly the same number of moves regardless of white player's move, meaning that there are 20 x 20 = 400 possible states or nodes at 2 ply.
 
@@ -113,14 +113,14 @@ The standard minimax algorithm with a search tree depth of 3 took approximately 
 
 ### Move ordering
 
-To make the chess AI faster, we want to prune as many branches ass possible. To do this we could order the moves, so that we look at the best ones first. Typically these are moves that capture the opponents pieces.
+To make the chess AI faster, we want to prune as many branches as possible. To do this we could order the moves, so that we look at the best ones first. Typically these are moves that capture the opponents pieces.
 By looking at at these moves first, the algorithm became roughly twice as fast!
 
 ### Piece square evaluation
 
 Alpha-beta pruning makes the chess AI faster, but not any better. To improve the skills of the AI, we need to improve the evaluation function. In other words, the evaluation function needs to give a better estimate of truly how good a position is.
 
-As a start we evaluated a state solely based on the material difference between the players. This is a simple and naive approach, as a lot of states (may be advantagous for black or white) may have the same material difference. A better approach would be to look at the positions of the different pieces. It is, for example, known that having control of the centre of the board is generally good, or that you want to avoid having knights on the edge of the board. We can incorprate this knowledge by using piece square evaulation tables. These tables lets us assign a value for each piece depending on their position. You could do this for all pieces for each player and look at the difference. I decided to add this difference to the evaluation function, and saw huge improvements in the skill level of the AI, especially in the opening play.
+As a start we evaluated a state solely based on the material difference between the players. This is a simple but naive approach, as a lot of states (may be advantagous for black or white) may have the same material difference. A better approach would be to look at the positions of the different pieces. It is, for example, known that having control of the centre of the board is generally good, or that you want to avoid having knights on the edge of the board. We can incorprate this knowledge by using piece square evaulation tables. These tables lets us assign a value for each piece depending on their position. You could do this for all pieces for each player and look at the difference. I decided to add this difference to the evaluation function, and saw huge improvements in the skill level of the AI, especially in the opening play.
 
 ### Evaluating bots
 
@@ -134,7 +134,7 @@ Below is the game between AlphaBeta (white) and AlphaBetaV2 (black) playing the 
 
 ## What I have learned
 
-This was a challenging but fun project! Implementing chess and testing the chess engine was more time consuming than first expected.
+This was a challenging but fun project! Implementing chess and testing the chess engine was more time-consuming than first expected.
 
 As a side note: I use Github Copilot in my daily work, but decided to disable it for this project. It undoubtebly made this project last longer, but I felt that I got a better grasp of the chess engine and AI algorithms when I had to implement and debug them on my own.
 
