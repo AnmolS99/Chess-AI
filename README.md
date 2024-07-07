@@ -126,6 +126,10 @@ Alpha-beta pruning makes the chess AI faster, but not any better. To improve the
 
 As a start we evaluated a state solely based on the material difference between the players. This is a simple but naive approach, as a lot of states (may be advantagous for black or white) may have the same material difference. A better approach would be to look at the positions of the different pieces. It is, for example, known that having control of the centre of the board is generally good, or that you want to avoid having knights on the edge of the board. We can incorprate this knowledge by using piece square evaulation tables. These tables lets us assign a value for each piece depending on their position. You could do this for all pieces for each player and look at the difference. I decided to add this difference to the evaluation function, and saw huge improvements in the skill level of the AI, especially in the opening play.
 
+Below is a visualization of the piece square evaluation table for knights:
+
+<img alt="Piece square evaluation for knights" src="./README_images/heatmap.png" width="400">
+
 ### Evaluating bots
 
 Since the AI bots are based on a deterministic algorithms, each game they play against each other from the starting position are played out the same. Therefore, to evaluate their performance relalative to each other, I tested them against each other on 10 different (but roughly equal evaluation) positions. Two games were played with each position, so that both players played as white once.
