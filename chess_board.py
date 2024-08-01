@@ -14,7 +14,6 @@ piece_value = {1: 1, 2: 5, 3: 3, 4: 3, 5: 9}
 
 class ChessBoard:
 
-    
     def reset_board(self):
         self.board = np.array([
             [-2, -3, -4, -5, -6, -4, -3, -2],
@@ -33,6 +32,7 @@ class ChessBoard:
         self.possible_en_passant = None
         self.castling_rights = {Player.white: {"king_side": True, "queen_side": True}, Player.black: {"king_side": True, "queen_side": True}}
         self.num_moves = 1
+        self.prev_move = None
 
     """Returns all legals moves for a selected piece (in a position)"""
     def get_legal_moves(self, selected_pos):
@@ -183,6 +183,7 @@ class ChessBoard:
             self.possible_en_passant = None
         self.num_moves += 1
         self.turn = Player.white if self.turn == Player.black else Player.black
+        self.prev_move = move
     
     def hyp_move_piece(self, board, king_position, move, turn):
         start_pos, end_pos, piece, capture = move
@@ -234,4 +235,5 @@ class ChessBoard:
         new_board.possible_en_passant = self.possible_en_passant
         new_board.castling_rights = copy.deepcopy(self.castling_rights)
         new_board.num_moves = self.num_moves
+        new_board.prev_move = self.prev_move
         return new_board

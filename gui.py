@@ -37,6 +37,10 @@ class ChessGUI:
                     color = "white"
                 else:
                     color = "#5f6087"
+
+                if self.game.prev_move is not None and ((row, col) == self.game.prev_move[0] or (row, col) == self.game.prev_move[1]):
+                    color = "#fff870"
+
                 self.canvas.create_rectangle(
                     col * self.square_size, (row * self.square_size) + self.info_size, (col + 1) * self.square_size, ((row + 1) * self.square_size) + self.info_size, fill=color
                 )
@@ -162,7 +166,7 @@ class ChessGUI:
         row = (event.y - self.info_size) // self.square_size # Account for the space above the board
         if self.selected_pos is not None:
             piece = self.game.board[self.selected_pos]
-            is_capture = piece * self.game.board[(row, col)] < 0
+            is_capture = piece * self.game.board[(row, col)] < 0 or (self.selected_pos[0], col) == self.game.possible_en_passant
             # If attempting promotion
             if (piece == 1 and row == 0) or (piece == -1 and row == 7):
                 promotion_move = (self.selected_pos, (row, col), 5 * self.game.turn.value, is_capture)
