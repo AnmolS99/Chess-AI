@@ -7,7 +7,7 @@ def main():
     """
     # Default player types
     white_player = "User"
-    black_player = "User"
+    black_player = "AlphaBetaV2"
     
     if len(sys.argv) >= 3:
 
