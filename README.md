@@ -2,6 +2,10 @@
 
 A comprehensive chess implementation from scratch that includes all functionalities, such as en passant, castling, and pawn promotion. AI bots based on the minimax and alpha-beta algorithms were also created. Additionally, a PyGame GUI provides a user-friendly interface for playing the game.
 
+<img alt="User vs. AlphaBetaV2 AI bot (1.5x speedup)" src="./README_images/chess_game_user_ai.gif" width="400">
+
+_User vs. AlphaBetaV2 AI bot (1.5x speedup)_
+
 ## Table of contents
 
 -   [Motivation 💪](#motivation-💪)
