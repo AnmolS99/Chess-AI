@@ -7,8 +7,10 @@ from player import Player
 class ChessGUI:
 
 
-    def __init__(self, game: ChessBoard, board_size=640, player_info_size=50, game_info_size=20):
+    def __init__(self, game: ChessBoard, white_player_name = "White", black_player_name = "Black", board_size=640, player_info_size=50, game_info_size=20):
         self.game = game
+        self.white_player_name = white_player_name
+        self.black_player_name = black_player_name
         self.board_size = board_size
         self.player_info_size = player_info_size
         self.game_info_size = game_info_size
@@ -82,8 +84,8 @@ class ChessGUI:
         # Display player info
         player_turn = self.game.turn
         player_points = self.game.get_points()
-        self.canvas.create_text(60, (self.player_info_size // 2) + self.game_info_size, text=f"Black ({player_points[Player.black]})", font=("Arial", 18), fill= "green" if player_turn == Player.black else "white")
-        self.canvas.create_text(60, self.board_size + self.info_size + self.player_info_size // 2, text=f"White ({player_points[Player.white]})", font=("Arial", 18), fill= "green" if player_turn == Player.white else "white")
+        self.canvas.create_text(15, (self.player_info_size // 2) + self.game_info_size, text=f"{self.black_player_name} ({player_points[Player.black]})", font=("Arial", 18), fill= "green" if player_turn == Player.black else "white", anchor="w")
+        self.canvas.create_text(15, self.board_size + self.info_size + self.player_info_size // 2, text=f"{self.white_player_name} ({player_points[Player.white]})", font=("Arial", 18), fill= "green" if player_turn == Player.white else "white", anchor="w")
 
         # Button to reset the game
         self.canvas.create_rectangle(self.board_size - 100, (self.player_info_size // 2) + self.game_info_size - 20, self.board_size, (self.player_info_size // 2) + self.game_info_size + 20, fill="green")

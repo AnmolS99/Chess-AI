@@ -15,7 +15,7 @@ class ChessGame():
     def __init__(self, white_player_type: PlayerType = PlayerType.User.name, black_player_type: PlayerType = PlayerType.User.name) -> None:
         self.chess_board = ChessBoard()
         self.chess_board.reset_board()
-        self.ui = ChessGUI(self.chess_board)
+        self.ui = ChessGUI(self.chess_board, white_player_type, black_player_type)
         self.white_player_type = white_player_type
         self.black_player_type = black_player_type
 
