@@ -31,11 +31,15 @@ class ChessGame():
         while not finished:
             if self.chess_board.turn == Player.white and not finished:
                 white_player.make_move()
+                if self.ui.win_closed:
+                    return
                 if show_ui:
                     self.ui.print_game()
                     self.ui.root.update()
             else:
                 black_player.make_move()
+                if self.ui.win_closed:
+                    return
                 if show_ui:
                     self.ui.print_game()
                     self.ui.root.update()

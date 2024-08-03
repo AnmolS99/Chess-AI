@@ -27,6 +27,17 @@ class ChessGUI:
         self.icon_dict = {1: PhotoImage(file="./assets/white_pawn.png"), 2: PhotoImage(file="./assets/white_rook.png"), 3: PhotoImage(file="./assets/white_knight.png"), 4: PhotoImage(file="./assets/white_bishop.png"), 5: PhotoImage(file="./assets/white_queen.png"), 6: PhotoImage(file="./assets/white_king.png"), -1: PhotoImage(file="./assets/black_pawn.png"), -2: PhotoImage(file="./assets/black_rook.png"), -3: PhotoImage(file="./assets/black_knight.png"), -4: PhotoImage(file="./assets/black_bishop.png"), -5: PhotoImage(file="./assets/black_queen.png"), -6: PhotoImage(file="./assets/black_king.png")}
         self.shade_image = self.get_shade_image()
         self.clicked = BooleanVar(value=False)
+        self.win_closed = False
+
+        # Bind the window close event
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def on_close(self):
+        self.clicked.set(True)
+        self.root.quit()
+        self.root.destroy()
+        self.win_closed = True
+        
 
     def print_game(self):
         self.canvas.delete("all")
